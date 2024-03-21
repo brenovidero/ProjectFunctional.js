@@ -1,62 +1,55 @@
-const readLine = require('readline');
-const fs = require('fs');
+document.addEventListener("DOMContentLoaded", function() {
+    // Caminho para o arquivo CSV dentro do diretório do programa
+    const filePath = './arquivosCSV/athlete_events.csv';
 
-// Cria uma interface de leitura para o arquivo CSV
-const line = readLine.createInterface({
-    input: fs.createReadStream('./arquivosCSV/athlete_events.csv'),
-});
+    // Função para carregar e processar o arquivo CSV
+    function processCSV() {
+        fetch(filePath) // Faz uma requisição GET para o arquivo CSV, ou seja, busca o arquivo no servidor e retorna uma Promise com a resposta
+            .then(response => response.text()) // O metodo then é chamado quando a Promise é resolvida, e retorna o conteúdo do arquivo CSV como texto
+            .then(data => { // O conteúdo do arquivo é passado como argumento para a função
+                const linhas = data.split('\n');// separa o arquivo em um array de strings, onde cada string é uma linha do CSV
+                const registros = [];
 
-const registros = []; // Lista para armazenar os objetos de cada linha
+                linhas.map(linha => { // map para processar cada linha do CSV
+                    const csv = linha.split(','); // separa a linha em um array de strings
+                    const cleanedCsv = csv.map(attribute => {// map para limpar cada atributo do CSV, removendo as aspas duplas, pontos e vírgulas
+                        const cleanedAttribute = attribute.replace(/[";]/g, ''); // regex para remover aspas duplas, pontos e vírgulas
+                        return !isNaN(cleanedAttribute) ? parseFloat(cleanedAttribute) : cleanedAttribute; // transforma em número se for numérico
+                    });
 
-line.on("line", (data) => {
-    const csv = data.split(',');
+                    const [ID, Name, Sex, Age, Height, Weight, Team, NOC, Games, Year, Season, City, Sport, Event, Medal] = cleanedCsv; // atribui cada valor do array a uma variável
 
-    // Limpar cada atributo do CSV, removendo as aspas duplas, pontos e vírgulas
-    const cleanedCsv = csv.map(attribute => {
-        const cleanedAttribute = attribute.replace(/[";]/g, '');
-        // Se o atributo for numérico, transforma em número
-        return !isNaN(cleanedAttribute) ? parseFloat(cleanedAttribute) : cleanedAttribute;
-    });
+                    // Criar um objeto com as propriedades especificadas e adicionar à lista
+                    // A condicional pode ser alterada para filtrar os resultados
+                    if(NOC === "BRA" && Medal !== "NA") {
+                        const registro = {
+                            ID: ID,
+                            Name: Name,
+                            Sex: Sex,
+                            Age: Age,
+                            Height: Height,
+                            Weight: Weight,
+                            Team: Team,
+                            NOC: NOC,
+                            Games: Games,
+                            Year: Year,
+                            Season: Season,
+                            City: City,
+                            Sport: Sport,
+                            Event: Event,
+                            Medal: Medal
+                        };
+                        registros.push(registro); /// Adiciona o registro ao array de registros
+                    }
+                });
+                console.log(registros)
 
-    const [ID, Name, Sex, Age, Height, Weight, Team, NOC, Games, Year, Season, City, Sport, Event, Medal] = cleanedCsv;
-
-    // Criar um objeto com as propriedades especificadas e adicionar à lista
-    // A condicional pode ser alterada para filtrar os resultados
-    if(NOC == "BRA" && Medal != "NA"){
-        const registro = {
-            ID: ID,
-            Name: Name,
-            Sex: Sex,
-            Age: Age,
-            Height: Height,
-            Weight: Weight,
-            Team: Team,
-            NOC: NOC,
-            Games: Games,
-            Year: Year,
-            Season: Season,
-            City: City,
-            Sport: Sport,
-            Event: Event,
-            Medal: Medal
-        };
-        registros.push(registro);
+                //mostraResultado(registros);
+            })
+            .catch(error => {
+                console.error('Ocorreu um erro ao processar o arquivo CSV:', error);
+            });
     }
-
+    // Chamar a função para processar o arquivo CSV quando a página for carregada
+    processCSV();
 });
-
-// função que pega o resultado de uma função e escreve em um arquivo JSON
-const mostraResultado = (registros) => {
-    const dados = JSON.stringify(registros, null, 2);
-    fs.writeFile('resultado.json', dados, (err) => {
-        if (err) throw err;
-        console.log('Resultado salvo em resultado.json');
-    });
-};
-
-// Quando terminar de ler o arquivo, chama a função que escreve o resultado
-line.on("close", () => {
-    mostraResultado(registros)
-});
-
-
