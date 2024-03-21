@@ -1,6 +1,7 @@
 const readLine = require('readline');
 const fs = require('fs');
 
+// Cria uma interface de leitura para o arquivo CSV
 const line = readLine.createInterface({
     input: fs.createReadStream('./arquivosCSV/athlete_events.csv'),
 });
@@ -17,26 +18,31 @@ line.on("line", (data) => {
         return !isNaN(cleanedAttribute) ? parseFloat(cleanedAttribute) : cleanedAttribute;
     });
 
-    // Criar um objeto com as propriedades especificadas e adicionar à lista
-    const registro = {
-        ID: cleanedCsv[0],
-        Name: cleanedCsv[1],
-        Sex: cleanedCsv[2],
-        Age: cleanedCsv[3],
-        Height: cleanedCsv[4],
-        Weight: cleanedCsv[5],
-        Team: cleanedCsv[6],
-        NOC: cleanedCsv[7],
-        Games: cleanedCsv[8],
-        Year: cleanedCsv[9],
-        Season: cleanedCsv[10],
-        City: cleanedCsv[11],
-        Sport: cleanedCsv[12],
-        Event: cleanedCsv[13],
-        Medal: cleanedCsv[14]
-    };
+    const [ID, Name, Sex, Age, Height, Weight, Team, NOC, Games, Year, Season, City, Sport, Event, Medal] = cleanedCsv;
 
-    registros.push(registro);
+    // Criar um objeto com as propriedades especificadas e adicionar à lista
+    // A condicional pode ser alterada para filtrar os resultados
+    if(NOC == "BRA" && Medal != "NA"){
+        const registro = {
+            ID: ID,
+            Name: Name,
+            Sex: Sex,
+            Age: Age,
+            Height: Height,
+            Weight: Weight,
+            Team: Team,
+            NOC: NOC,
+            Games: Games,
+            Year: Year,
+            Season: Season,
+            City: City,
+            Sport: Sport,
+            Event: Event,
+            Medal: Medal
+        };
+        registros.push(registro);
+    }
+
 });
 
 // função que pega o resultado de uma função e escreve em um arquivo JSON
@@ -48,6 +54,7 @@ const mostraResultado = (registros) => {
     });
 };
 
+// Quando terminar de ler o arquivo, chama a função que escreve o resultado
 line.on("close", () => {
     mostraResultado(registros)
 });
