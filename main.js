@@ -7,21 +7,21 @@ document.addEventListener("DOMContentLoaded", function() {
         fetch(filePath) // Faz uma requisição GET para o arquivo CSV, ou seja, busca o arquivo no servidor e retorna uma Promise com a resposta
             .then(response => response.text()) // O metodo then é chamado quando a Promise é resolvida, e retorna o conteúdo do arquivo CSV como texto
             .then(data => { // O conteúdo do arquivo é passado como argumento para a função
-                const linhas = data.split('\n');// separa o arquivo em um array de strings, onde cada string é uma linha do CSV
+                const linhas = data.split(/\r?\n/);// Separar linhas usando expressão regular para incluir \r
                 const registros = [];
 
                 linhas.map(linha => { // map para processar cada linha do CSV
-                    const csv = linha.split(','); // separa a linha em um array de strings
+                    const linhaLimpa = linha.replace(/[";]/g, '');
+                    const csv = linhaLimpa.split(',') // separa a linha em um array de strings
                     const cleanedCsv = csv.map(attribute => {// map para limpar cada atributo do CSV, removendo as aspas duplas, pontos e vírgulas
-                        const cleanedAttribute = attribute.replace(/[";]/g, ''); // regex para remover aspas duplas, pontos e vírgulas
-                        return !isNaN(cleanedAttribute) ? parseFloat(cleanedAttribute) : cleanedAttribute; // transforma em número se for numérico
+                        return !isNaN(attribute) ? parseFloat(attribute) : attribute; // transforma em número se for numérico
                     });
 
                     const [ID, Name, Sex, Age, Height, Weight, Team, NOC, Games, Year, Season, City, Sport, Event, Medal] = cleanedCsv; // atribui cada valor do array a uma variável
 
                     // Criar um objeto com as propriedades especificadas e adicionar à lista
                     // A condicional pode ser alterada para filtrar os resultados
-                    if(NOC === "BRA" && Medal !== "NA") {
+                    if(NOC === "BRA" && Medal !== "NA" && Year <= 1930) {
                         const registro = {
                             ID: ID,
                             Name: Name,
