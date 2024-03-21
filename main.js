@@ -2,7 +2,7 @@ const readLine = require('readline');
 const fs = require('fs');
 
 const line = readLine.createInterface({
-    input: fs.createReadStream('athlete_events.csv'),
+    input: fs.createReadStream('./arquivosCSV/athlete_events.csv'),
 });
 
 const registros = []; // Lista para armazenar os objetos de cada linha
