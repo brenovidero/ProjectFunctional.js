@@ -1,101 +1,125 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Olimpíadas</title>
+    <title>Olimpíadas Interativas</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- FontAwesome para ícones -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="estilos.css">
+
 </head>
 <body>
-    <h1>Olimpíadas</h1>
-    
-    <section>
-        <h2>1. Quem foi a primeira mulher a ganhar
-            <select id="medalha">
-            <option value="selecione">Medalha</option>
-            <option value="gold">Gold</option>
-            <option value="silver">Silver</option>
-            <option value="bronze">Bronze</option>
-        <!-- Adicione mais opções de conforme necessário -->
-        </select>?
-            no(a) 
-            <select id="esportes">
-                <option value="atletismo">Atletismo</option>
-                <option value="handebol">Handbol</option>
-                <option value="natação">Natação</option>
-            <!-- Adicione mais opções de conforme necessário -->
-            </select>?
-        </h2>
-        <button onclick="">Responder</button>
-    </section>
-    
-    <section>
-        <h2>2. Quantos atletas participaram das Olimpíadas de
-            <select id="anoQ2">
-                <option value="2000">2012</option>
-                <option value="2000">2016</option>
-                <option value="2000">2012</option>
-                <option value="1990">2008</option>
-                <option value="1986">2004</option>
-                <option value="2000">2000</option>
-                <option value="1990">1990</option>
-                <option value="1986">1986</option>
-                <!-- Adicione mais opções de conforme necessário -->
-                </select>
-                 representando o(a) 
-                 <select id="paisQ2">
-                    <option value="Bra">Brasil</option>
-                    <option value="EGY">Egypt</option>
-                    <option value="USA">United States</option>
-                    <!-- Adicione mais opções de conforme necessário -->
-                    </select>?
-                </h2>
-        <button onclick="">Responder</button>
-    </section>
-    
-    <section>
-        <h2>3. Quais foram os eventos esportivos mais populares nas Olimpíadas de 
-            <select id="anoQ3">
-                <option value="2000">2000</option>
-                <option value="1990">1990</option>
-                <option value="1986">1986</option>
-                <!-- Adicione mais opções de conforme necessário -->
-                </select>?
-        </h2>
-        <button onclick="">Responder</button>
-    </section>
-    
-    <section>
-        <h2>4. Quem foi o atleta mais jovem a ganhar medalha de ouro nas Olimpíadas de 
-            <select id="anoQ4">
-                <option value="2000">2000</option>
-                <option value="1990">1990</option>
-                <option value="1986">1986</option>
-                <!-- Adicione mais opções de conforme necessário -->
-                </select>?
-            </h2>
-        <button onclick="">Responder</button>
-    </section>
-    
-    <section>
-        <h2>5. Qual foi a idade do atleta mais velho a competir nas Olimpíadas de 
-            <select id="anoQ5">
-                <option value="2000">2000</option>
-                <option value="1990">1990</option>
-                <option value="1986">1986</option>
-                <!-- Adicione mais opções de conforme necessário -->
-                </select>
-             representando o(a)
-            <select id="paisQ5">
-                <option value="Bra">Brasil</option>
-                <option value="EGY">Egypt</option>
-                <option value="USA">United States</option>
-                <!-- Adicione mais opções de conforme necessário -->
-                </select>?</h2>
-        <button onclick="">Responder</button>
-    </section>
+    <header class="text-center p-4">
+        <h1> Olimpíadas Interativas</h1>
+        <p class="introdutorio">Teste o seu <span class="mudar-cor">conhecimento!!</span></p>
+    </header>
+    <main class="container my-5">
+        <section id="interactive-questions">
+            <div class="modal-rules">
+            </div>
+            <!-- Pergunta 1 -->
+            <div class="question-container">
+                <p class="question-title"><i class="fas fa-question-circle animated-question-mark" data-toggle="modal" data-target="#regrasModal"></i> Quantos atletas ganharam medalhas em mais de um esporte?</p>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Digite sua resposta" aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Enviar</button>
+                    </div>
+                </div>
+                <div id="response1" class="response-container">
+                    <!-- A resposta será exibida aqui -->
+                </div>
+            </div>
+            <!-- Adicione mais perguntas aqui -->
+            <!-- Pergunta 2 -->
+            <div class="question-container">
+                <p class="question-title"><i class="fas fa-question-circle animated-question-mark" data-toggle="modal" data-target="#regrasModal"></i> Quantos atletas ganharam medalhas em mais de um esporte?</p>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Digite sua resposta" aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Enviar</button>
+                    </div>
+                </div>
+                <div id="response1" class="response-container">
+                    <!-- A resposta será exibida aqui -->
+                </div>
+            </div>
+            <!-- Pergunta 3 -->
+            <div class="question-container">
+                <p class="question-title"><i class="fas fa-question-circle animated-question-mark" data-toggle="modal" data-target="#regrasModal"></i> Quantos atletas ganharam medalhas em mais de um esporte?</p>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Digite sua resposta" aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Enviar</button>
+                    </div>
+                </div>
+                <div id="response1" class="response-container">
+                    <!-- A resposta será exibida aqui -->
+                </div>
+            </div>
+            <!-- Pergunta 4 -->
+            <div class="question-container">
+                <p class="question-title"><i class="fas fa-question-circle animated-question-mark" data-toggle="modal" data-target="#regrasModal"></i> Quantos atletas ganharam medalhas em mais de um esporte?</p>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Digite sua resposta" aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Enviar</button>
+                    </div>
+                </div>
+                <div id="response1" class="response-container">
+                    <!-- A resposta será exibida aqui -->
+                </div>
+            </div>
+            <!-- Pergunta 5 -->
+            <div class="question-container">
+                <p class="question-title"><i class="fas fa-question-circle animated-question-mark" data-toggle="modal" data-target="#regrasModal"></i> Quantos atletas ganharam medalhas em mais de um esporte?</p>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Digite sua resposta" aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Enviar</button>
+                    </div>
+                </div>
+                <div id="response1" class="response-container">
+                    <!-- A resposta será exibida aqui -->
+                </div>
+            </div>
+        </section>
+    </main>
 
-    <script src="main.js"></script>
+    <!-- Modal para as regras -->
+    <div class="modal fade" id="regrasModal" tabindex="-1" role="dialog" aria-labelledby="regrasModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="regrasModalLabel">Regras</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Insira as regras aqui -->
+                    DIGITE EM INGLÊS, APENAS UTILIZE LETRAS MAIÚSCULAS, UTILIZE APENAS SIGLAS PARA REPRESENTAR OS PAÍSES EXEMPLO “BRA” DE BRASIL.
 
+                    <div id="typed-rules"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center p-3">
+        <p class="modal-body uppercase">Desenvolvido por <strong>Adley Breno de Melo Morais, José Gustavo Ramos Silva, Vitor Leonardo Sena De Lima</strong></p>
+    </footer>
+
+    <!-- Bootstrap e jQuery -->
+
+    <script src="style.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
