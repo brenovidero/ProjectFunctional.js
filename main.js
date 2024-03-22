@@ -22,24 +22,52 @@ document.addEventListener("DOMContentLoaded", function() {
                     // Criar um objeto com as propriedades especificadas e adicionar à lista
                     // A condicional pode ser alterada para filtrar os resultados
                     if(NOC === "BRA" && Medal !== "NA" && Year <= 1930) {
-                        const registro = {
-                            ID: ID,
-                            Name: Name,
-                            Sex: Sex,
-                            Age: Age,
-                            Height: Height,
-                            Weight: Weight,
-                            Team: Team,
-                            NOC: NOC,
-                            Games: Games,
-                            Year: Year,
-                            Season: Season,
-                            City: City,
-                            Sport: Sport,
-                            Event: Event,
-                            Medal: Medal
-                        };
-                        registros.push(registro); /// Adiciona o registro ao array de registros
+                            const ultimoIndice = cleanedCsv.length;
+                        if (ultimoIndice > 15) { // Se o comprimento for maior que 15 a partir do índice 13 (Event)
+                            const eventIndex = 13;
+                            const lastEventIndex = cleanedCsv.findIndex((item, index) => index > eventIndex && item === 'Medal') - 1; // Encontrar o índice do último elemento de Event
+                            const eventValue = cleanedCsv.slice(eventIndex, lastEventIndex + 1).join(','); // Concatenar os elementos de Event
+    
+                            const registro = {
+                                ID: ID,
+                                Name: Name,
+                                Sex: Sex,
+                                Age: Age,
+                                Height: Height,
+                                Weight: Weight,
+                                Team: Team,
+                                NOC: NOC,
+                                Games: Games,
+                                Year: Year,
+                                Season: Season,
+                                City: City,
+                                Sport: Sport,
+                                Event: eventValue,
+                                Medal: cleanedCsv[ultimoIndice -1 ]
+                            };
+                            
+                            registros.push(registro); /// Adiciona o registro ao array de registros
+                            return registro; // Retornar o registro
+                        } else { // Se o comprimento for 15 ou menos, criar o registro normalmente
+                            const registro2 = {
+                                ID: ID,
+                                Name: Name,
+                                Sex: Sex,
+                                Age: Age,
+                                Height: Height,
+                                Weight: Weight,
+                                Team: Team,
+                                NOC: NOC,
+                                Games: Games,
+                                Year: Year,
+                                Season: Season,
+                                City: City,
+                                Sport: Sport,
+                                Event: Event,
+                                Medal: Medal
+                            };
+                            registros.push(registro2); // Adiciona o registro ao array de registros
+                        }
                     }
                 });
                 console.log(registros)
