@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded",  () => {
             .then(response => response.text()) // O metodo then é chamado quando a Promise é resolvida, e retorna o conteúdo do arquivo CSV como texto
             .then(data => { // O conteúdo do arquivo é passado como argumento para a função
                 const linhas = data.split(/\r?\n/);// Separar linhas usando expressão regular para incluir \r
-                const sexValues = ['M', 'F', 'NA']; 
                 const novasLinhas = linhas.map(linha => { // map para processar cada linha do CSV
                     const linhaLimpa = linha.replace(/[";]/g, '');
                     const csv = linhaLimpa.split(',') // separa a linha em um array de strings
@@ -61,8 +60,14 @@ document.addEventListener("DOMContentLoaded",  () => {
         return mulheresMedalhas
     }
 
+    listaPessoasComNomeLascado = (lista) => {
+        const lista2 = lista.filter(pessoa => pessoa.Sex !== "M" && pessoa.Sex !== "F" && pessoa.Sex !== "NA");
+        return lista2;
+    }
+
     const ManipulaDadosOlimpiadas = (novasLinhas) => {
-        console.log(pessoaMaisAlta(novasLinhas)); // Encontra a pessoa mais alta, 1º questão
-        console.log(filtraPrimeiraMulherMedalhaEsporte(novasLinhas)('Bronze')('Football')); // Filtra as mulheres que ganharam medalhas de ouro no esporte de atletismo, 1º questão
-        console.log(filtraPrimeiraMulherMedalhaEsporte(novasLinhas)('Gold')('Diving')); // Filtra as mulheres que ganharam medalhas de ouro no esporte de mergulho, 1º questão
+    console.log(listaPessoasComNomeLascado(novasLinhas));
+       //console.log(pessoaMaisAlta(novasLinhas)); // Encontra a pessoa mais alta, 1º questão
+       // console.log(filtraPrimeiraMulherMedalhaEsporte(novasLinhas)('Bronze')('Football')); // Filtra as mulheres que ganharam medalhas de ouro no esporte de atletismo, 1º questão
+       // console.log(filtraPrimeiraMulherMedalhaEsporte(novasLinhas)('Gold')('Diving')); // Filtra as mulheres que ganharam medalhas de ouro no esporte de mergulho, 1º questão
     }
