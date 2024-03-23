@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded",  () => {
             .then(response => response.text()) // O metodo then é chamado quando a Promise é resolvida, e retorna o conteúdo do arquivo CSV como texto
             .then(data => { // O conteúdo do arquivo é passado como argumento para a função
                 const linhas = data.split(/\r?\n/);// Separar linhas usando expressão regular para incluir \r
-
+                const sexValues = ['M', 'F', 'NA']; 
                 const novasLinhas = linhas.map(linha => { // map para processar cada linha do CSV
                     const linhaLimpa = linha.replace(/[";]/g, '');
                     const csv = linhaLimpa.split(',') // separa a linha em um array de strings
@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded",  () => {
                         return { ID: ID, Name: Name, Sex: Sex, Age: Age, Height: Height, Weight: Weight, Team: Team, NOC: NOC, Games: Games, Year: Year, Season: Season, City: City, Sport: Sport, Event: Event, Medal: Medal };
                     }
 
-                });
+                }).slice(1);// Ignora a primeira linha do CSV, que contém os cabeçalhos das colunas
                 ManipulaDadosOlimpiadas(novasLinhas); // Chama a função para manipular os dados do arquivo CSV
             })
             .catch(error => { // O método catch é chamado quando a Promise é rejeitada, e retorna um erro
@@ -37,6 +37,18 @@ document.addEventListener("DOMContentLoaded",  () => {
     processCSV(); // Chama a função para processar o arquivo CSV
 });
 
+    const pessoaMaisAlta = (novasLinhas) => { 
+        const [primeiraLinha] = novasLinhas; // Desestruturação para pegar a primeira linha do array
+        const altura = novasLinhas.reduce((acc, atleta) => { // Faz um reduce para encontrar a pessoa mais alta do sexo feminino
+            if (!acc || acc.Height < atleta.Height && atleta.Height !== 'string' && atleta.Sex == 'F') {  // Se a altura do acumulador for menor que a altura do atleta e a altura do atleta não for uma string, retorna o atleta
+                return atleta;
+            } else {
+                return acc;
+            }
+        }, primeiraLinha); // Iniciar o acumulador com o primeiro atleta
+        return altura
+    }
+
     const filtraPrimeiraMulherMedalhaEsporte = (novasLinhas) => (medalha) => (esporte) => {
         const mulheresMedalhas = novasLinhas.filter(atleta => atleta.Sex === 'F' && atleta.Medal == medalha && atleta.Sport === esporte)
         .reduce((acc, atleta) => { // Faz um reduce para encontrar a atleta mais antiga
@@ -45,10 +57,12 @@ document.addEventListener("DOMContentLoaded",  () => {
             } else { 
                 return acc; // Se não, retorna o acumulador, até encontrar a atleta mais antiga
             }
-        }, null);
-        return console.log(mulheresMedalhas); // Imprimi o resultado da atleta mais antiga
+        }, undefined);
+        return mulheresMedalhas
     }
 
     const ManipulaDadosOlimpiadas = (novasLinhas) => {
-        return filtraPrimeiraMulherMedalhaEsporte(novasLinhas)('Gold')('Diving'); // Filtra as mulheres que ganharam medalhas de ouro no esporte de mergulho, 1º questão
+        console.log(pessoaMaisAlta(novasLinhas)); // Encontra a pessoa mais alta, 1º questão
+        console.log(filtraPrimeiraMulherMedalhaEsporte(novasLinhas)('Bronze')('Football')); // Filtra as mulheres que ganharam medalhas de ouro no esporte de atletismo, 1º questão
+        console.log(filtraPrimeiraMulherMedalhaEsporte(novasLinhas)('Gold')('Diving')); // Filtra as mulheres que ganharam medalhas de ouro no esporte de mergulho, 1º questão
     }
