@@ -29,7 +29,7 @@ h1 {
 }
 
 /* Efeito de sombra para os títulos */
-h1,{
+h1{
     text-shadow: 2px 2px 4px #000000;
 }
 
