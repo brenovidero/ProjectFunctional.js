@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded",  () => {
                 return acc; // Se não, retorna o acumulador, até encontrar a atleta mais antiga
             }
         }, undefined);
-        return mulheresMedalhas
+        return mulheresMedalhas;
     }
 
     listaPessoasComNomeLascado = (lista) => {
@@ -65,8 +65,22 @@ document.addEventListener("DOMContentLoaded",  () => {
         return lista2;
     }
 
+    listarNomeDosAtletasSemRepetir = (lista) => {
+        return lista.filter((elemento, indice) => {
+            // Se for o primeiro elemento, ou se o elemento atual for diferente do anterior, mantenha-o
+            if (indice == 0 || elemento.ID !== lista[indice - 1].ID) {
+                return true;
+            }
+            // Se o elemento atual for igual ao anterior, ignore-o (retorna false no filter)
+            return false;
+        });
+    };
+
+        
+
     const ManipulaDadosOlimpiadas = (novasLinhas) => {
     console.log(listaPessoasComNomeLascado(novasLinhas));
+   // console.log(listarNomeDosAtletasSemRepetir(novasLinhas));
        //console.log(pessoaMaisAlta(novasLinhas)); // Encontra a pessoa mais alta, 1º questão
        // console.log(filtraPrimeiraMulherMedalhaEsporte(novasLinhas)('Bronze')('Football')); // Filtra as mulheres que ganharam medalhas de ouro no esporte de atletismo, 1º questão
        // console.log(filtraPrimeiraMulherMedalhaEsporte(novasLinhas)('Gold')('Diving')); // Filtra as mulheres que ganharam medalhas de ouro no esporte de mergulho, 1º questão
