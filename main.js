@@ -38,19 +38,26 @@ document.addEventListener("DOMContentLoaded",  () => {
             (x, y, i) => {
               // Remove o caractere '\r\n' do atributo 'id'
               if (header[i] === 'id') {
-                y = y.replace(/\r\n/g, '');
-              }
-              if(header[i] == 'age' || header[i] == 'height' || header[i] == 'weight' || header[i] == 'year' || header[i] == 'id'){
-                y = parseInt(y);
-              }
-              // Condicional para retirar atributos
-              if (header[i] !== 'event' && header[i] !== 'weight' && header[i] !== 'city' && header[i] !== 'games' && header[i] !== 'noc' && header[i] != 'season') {
                 return {
-                  ...x,
-                  [header[i]]: y,
-                };
+                    ...x,
+                    [header[i]]: parseInt(y.replace(/\r\n/g, '')), // Remove o caractere '\r\n' do atributo 'id'
+                  };
               }
-              return x;// Retorna o objeto x sem alterações
+              // Converte os atributos 'age', 'height', 'weight' e 'year' para números inteiros
+              if(header[i] == 'age' || header[i] == 'height' || header[i] == 'weight' || header[i] == 'year' || header[i] == 'id'){
+                return {
+                    ...x,
+                    [header[i]]: parseInt(y),
+                    };
+                }
+                // Condicional para retirar atributos desnecessários
+                if (header[i] !== 'event' && header[i] !== 'weight' && header[i] !== 'city' && header[i] !== 'games' && header[i] !== 'noc' && header[i] != 'season') {
+                    return {
+                        ...x,
+                        [header[i]]: y,
+                    };
+                }
+                return x;// Caso não entre em nenhuma condição, retorna o objeto sem alterações
             },
             {}
           )
