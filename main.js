@@ -1,122 +1,255 @@
 
 document.addEventListener("DOMContentLoaded",  () => {
-    // Caminho para o arquivo CSV dentro do diretório do programa
-    const filePath = './arquivosCSV/athlete_events.csv';
-    // Função para carregar e processar o arquivo CSV
-    const processCSV = () => {
-        fetch(filePath) // Faz uma requisição GET para o arquivo CSV, ou seja, busca o arquivo no servidor e retorna uma Promise com a resposta
-            .then(response => response.text()) // O metodo then é chamado quando a Promise é resolvida, e retorna o conteúdo do arquivo CSV como texto
-            .then(csvLine => { // O conteúdo do arquivo é passado como argumento para a função
-                 // Divide o CSV em linhas, utilizando o padrão de separação ";;;;;;;;;;;;;;;\n?"
-    // Isso significa que o separador é uma linha que contém múltiplos ';' seguidos por um possível quebra de linha (\n)
-    // O [h, ...rows] é uma técnica chamada "destructuring assignment" que divide o resultado da divisão do CSV em duas partes:
-    // - h: a primeira linha (que contém o cabeçalho)
-    // - rows: as linhas restantes (dados)
-    const [h, ...rows] = csvLine.split(/;;;;;;;;;;;;;;;\n?/);
-    
-    // Converte o cabeçalho para letras minúsculas e remove aspas duplas
-    const header = h
-      .toLowerCase() // converte para minúsculas
-      .split(",") // divide o cabeçalho em array, usando ',' como delimitador
-      .map((x) => x.replace(/["]/g, "")); // remove aspas duplas de cada elemento do cabeçalho
-  
-    // Retorna um array contendo o cabeçalho e os dados processados
-    const csvCleaned = [
-      header, // cabeçalho
-      // Para cada linha de dados:
-      rows.slice(0, -1).map((x) => x
-        // Divide a linha em array de campos, utilizando a expressão regular
-        // /(?:,"|",(?=\w))/gi
-        // Isso significa que o separador é ','
-        // mas o match não consome o ','
-        // apenas pega a ',' que é seguida por um caractere alfanumérico
-        .split(/(?:,"|",(?=\w))/gi)
-        // Para cada campo, ajusta-o conforme necessário
-        .flatMap((y, i) => (i === 3 ? y.split(",") : y.replace(/["]/g, "")))
-        // Reduz o array de campos para um objeto, utilizando o cabeçalho como chaves
-        .reduce(
-            (x, y, i) => {
-              // Remove o caractere '\r\n' do atributo 'id'
-              if (header[i] === 'id') {
-                return {
-                    ...x,
-                    [header[i]]: parseInt(y.replace(/\r\n/g, '')), // Remove o caractere '\r\n' do atributo 'id'
-                  };
-              }
-              // Converte os atributos 'age', 'height', 'weight' e 'year' para números inteiros
-              if(header[i] == 'age' || header[i] == 'height' || header[i] == 'weight' || header[i] == 'year' || header[i] == 'id'){
-                return {
-                    ...x,
-                    [header[i]]: parseInt(y),
-                    };
-                }
-                // Condicional para retirar atributos desnecessários
-                if (header[i] !== 'event' && header[i] !== 'weight' && header[i] !== 'city' && header[i] !== 'games' && header[i] !== 'noc' && header[i] != 'season') {
-                    return {
-                        ...x,
-                        [header[i]]: y,
-                    };
-                }
-                return x;// Caso não entre em nenhuma condição, retorna o objeto sem alterações
-            },
-            {}
-          )
-      ),
-    ].slice(1);// Ignora a primeira linha do CSV, que contém os cabeçalhos das colunas;
-            console.log(csvCleaned); // Exibe o conteúdo do arquivo CSV processado no console;
-                ManipulaDadosOlimpiadas(csvCleaned); // Chama a função para manipular os dados do arquivo CSV;
-            })
-            .catch(error => { // O método catch é chamado quando a Promise é rejeitada, e retorna um erro
-                console.error('Ocorreu um erro ao processar o arquivo CSV:', error);
-            });
-    }
-    // Chamar a função para processar o arquivo CSV quando a página for carregada
-    processCSV(); // Chama a função para processar o arquivo CSV
+  // Caminho para o arquivo CSV dentro do diretório do programa
+  const filePath = './arquivosCSV/athlete_events.csv';
+  // Função para carregar e processar o arquivo CSV
+  const processarCSV = () => {
+    fetch(filePath) // Faz uma requisição GET para o arquivo CSV, ou seja, busca o arquivo no servidor e retorna uma Promise com a resposta
+        .then(response => response.text()) // O método then é chamado quando a Promise é resolvida, e retorna o conteúdo do arquivo CSV como texto
+        .then(csvLinha => { // O conteúdo do arquivo é passado como argumento para a função
+            // Divide o CSV em linhas, utilizando o padrão de separação ";;;;;;;;;;;;;;;\n?"
+            // Isso significa que o separador é uma linha que contém múltiplos ';' seguidos por um possível quebra de linha (\n)
+            // O [cabecalho, ...linhas] é uma técnica chamada "destructuring assignment" que divide o resultado da divisão do CSV em duas partes:
+            // - cabecalho: a primeira linha (que contém o cabeçalho)
+            // - linhas: as linhas restantes (dados)
+            const [cabecalho, ...linhas] = csvLinha.split(/;;;;;;;;;;;;;;;\n?/);
+            
+            // Converte o cabeçalho para letras minúsculas e remove aspas duplas
+            const cabecalhoFormatado = cabecalho
+                .toLowerCase() // converte para minúsculas
+                .split(",") // divide o cabeçalho em array, usando ',' como delimitador
+                .map((elemento) => elemento.replace(/["]/g, "")); // remove aspas duplas de cada elemento do cabeçalho
+
+            // Retorna um array contendo o cabeçalho e os dados processados
+            const csvLimpo = [
+                cabecalhoFormatado, // cabeçalho
+                // Para cada linha de dados:
+                linhas.slice(0, -1)
+                    .filter((linha) => linha.indexOf('Basketball') != -1) // Filtra as linhas que contém a palavra 'Basquete'
+                    .map((linha) => linha
+                        // Divide a linha em array de campos, utilizando a expressão regular
+                        // /(?:,"|",(?=\w))/gi
+                        // Isso significa que o separador é ','
+                        // mas o match não consome o ','
+                        // apenas pega a ',' que é seguida por um caractere alfanumérico
+                        .split(/(?:,"|",(?=\w))/gi)
+                        // Para cada campo, ajusta-o conforme necessário
+                        .flatMap((elemento, indice) => (indice === 3 ? elemento.split(",") : elemento.replace(/["]/g, ""))) // O flatMap vai transformar um array de arrays em um array simples
+                        
+                        // Reduz o array de campos para um objeto, utilizando o cabeçalho como chaves
+                        .reduce(
+                            (acumulador, elemento, indice) => {
+                                // Remove o caractere '\r\n' do atributo 'id'
+                                if (cabecalhoFormatado[indice] === 'id') {
+                                    return {
+                                        ...acumulador,
+                                        [cabecalhoFormatado[indice]]: parseInt(elemento.replace(/\r\n/g, '')), // Remove o caractere '\r\n' do atributo 'id'
+                                    };
+                                }
+                                // Converte os atributos 'idade', 'altura', 'peso' e 'ano' para números inteiros
+                                if (cabecalhoFormatado[indice] === 'age' || cabecalhoFormatado[indice] === 'height' ||  cabecalhoFormatado[indice] === 'year' || cabecalhoFormatado[indice] === 'id') {
+                                    return {
+                                        ...acumulador,
+                                        [cabecalhoFormatado[indice]]: parseInt(elemento),
+                                    };
+                                }
+                                // Condicional para retirar atributos desnecessários
+                                if (cabecalhoFormatado[indice] !== 'event' && cabecalhoFormatado[indice] !== 'weight' && cabecalhoFormatado[indice] !== 'city' && cabecalhoFormatado[indice] !== 'games' && cabecalhoFormatado[indice] !== 'noc' && cabecalhoFormatado[indice] !== 'season') {
+                                    return {
+                                        ...acumulador,
+                                        [cabecalhoFormatado[indice]]: elemento,
+                                    };
+                                }
+                                return acumulador; // Caso não entre em nenhuma condição, retorna o objeto sem alterações
+                            },
+                            {}
+                        )
+                    ),
+            ].slice(1)[0]; // Remove a primeira linha, que é o cabeçalho
+            recebeListaAtletas(csvLimpo);
+          //primeiraQuestão(csvCleaned); // Chama a função para manipular os dados do arquivo CSV;
+          })
+          .catch(error => { // O método catch é chamado quando a Promise é rejeitada, e retorna um erro
+              console.error('Ocorreu um erro ao processar o arquivo CSV:', error);
+          });
+  }
+  // Chamar a função para processar o arquivo CSV quando a página for carregada
+  processarCSV(); // Chama a função para processar o arquivo CSV
 });
 
-// -- [Funções antigas] -------------------------
+// -- [Funções puras] -------------------------
 
-    // const pessoaMaisAlta = (novasLinhas) => { 
-    //     const [primeiraLinha] = novasLinhas[0]; // Desestruturação para pegar a primeira linha do array
-    //     const altura = novasLinhas[0].reduce((acc, atleta) => { // Faz um reduce para encontrar a pessoa mais alta do sexo feminino
-    //         if (!acc || acc.height < atleta.height && atleta.height !== NaN && atleta.sex == 'M') {  // Se a altura do acumulador for menor que a altura do atleta e a altura do atleta não for uma string, retorna o atleta
-    //             return atleta;
-    //         } else {
-    //             return acc;
-    //         }
-    //     }, primeiraLinha); // Iniciar o acumulador com o primeiro atleta
-    //     return altura
-    // }
+//Primeira Questão
+// const primeiraQuestão = (maiorNumeroDeMedalhaDeOuro) => maiorNumeroDeMedalhaDeOuro
+//   .filter(x => x.medel == "Gold" && x.Sport == "Basketball")
+//   .map(x => x.)
 
-    // const filtraPrimeiraMulherMedalhaEsporte = (novasLinhas) => (medalha) => (esporte) => {
-    //     const mulheresMedalhas = novasLinhas[0].filter(atleta => atleta.sex === 'F' && atleta.medal == medalha && atleta.sport === esporte)
-    //     .reduce((acc, atleta) => { // Faz um reduce para encontrar a atleta mais antiga
-    //         if (!acc || acc.year > atleta.year) {// Se o ano da atleta for maior que o ano do acumulador, retorna a atleta, ou seja a mais antiga
-    //             return atleta;
-    //         } else { 
-    //             return acc; // Se não, retorna o acumulador, até encontrar a atleta mais antiga
-    //         }
-    //     }, null);
-    //     return mulheresMedalhas;
-    // }
+// Declaração de variáveis
+// Array de perguntas com as funções de alta ordem para buscar a resposta correta
+const recebeListaAtletas = (csvCleaned) => {
+const perguntas = [
+{
+  pergunta: "Qual foi o país que conquistou o maior número de medalhas de ouro no basquete masculino até 2014?",
+  buscarResposta: (atletas) => (alternativas = undefined) => {
+    const medalhasOuroPorPais = atletas.filter(atleta => atleta.medal == "Gold" && atleta.sex == "M" && atleta.year < 2014).reduce((contador, atleta) => {
+      contador[atleta.team] = (contador[atleta.team] || 0) + 1;
+      return contador;
+    }, {}); // Estados Unidos ganharam 174 medalhas de ouro, se dividir pela quantidade de vezes (174/14), temos aproximadamente 12 atletas com medalhas em cada ano, ou seja está correto
+    const corte = alternativas != undefined ? alternativas : medalhasOuroPorPais.length;
+    const paisComMaisOuro = Object.keys(medalhasOuroPorPais).slice(0, corte);
+    return paisComMaisOuro;
+  },
+  pontos: 1
+},
+{
+  pergunta: "Quantas vezes as equipes dos Estados Unidos ganharam a medalha de ouro no basquete masculino até 2016?",
+  buscarResposta: atletas => (alternativas = undefined) => {
+    const ouroEUA = atletas.filter(atleta => atleta.medal == "Gold" && atleta.team == "United States" && atleta.sex == "M" && atleta.year < 2016)
+                            .reduce((acc, atletas)=>{
+                              index = acc.findIndex(x => x.year == atletas.year);
+                              if(index == -1){
+                                acc = [...acc, atletas];
+                              }
+                              return acc;
+                            }, []).length; // Ganharam 14 vezes
+    const outrasAlternativas = [9,10,13,16]
+    const corte = alternativas != undefined ? alternativas : outrasAlternativas.length + 1;
+    const resposta = [...[ouroEUA ,...outrasAlternativas].slice(0, corte).sort((a,b) => a - b)];
+    return resposta;
+  },
+  pontos: 1
+},
+{
+  pergunta: "Quantos países já ganharam medalhas de ouro no basquete masculino nas Olimpíadas até 1980?",
+  buscarResposta: atletas => (alternativas = undefined) =>{
+    const paisesComOuro = atletas.filter(atleta => atleta.medal == "Gold" && atleta.sex == "M" && atleta.year <= 1980)
+                                  .reduce((acc, atleta)=>{
+                                    index = acc.findIndex(x => x.team == atleta.team);
+                                    if(index == -1){
+                                      acc = [...acc, atleta];
+                                    }
+                                    return acc;
+                                  },[]).map(x => x.team);
+    const qtdPaisesComOuro = paisesComOuro.length; // 3 países ganharam medalhas de ouro
+    const corte = alternativas != undefined ? alternativas : paisesComOuro.length + 2;
+    const outrasAlternativas = [1,2,5,8];        
+    const resposta = [...[qtdPaisesComOuro, ...outrasAlternativas]].slice(0, corte).sort((a,b) => a - b);
+    return resposta;
+  },
+  pontos: 1
+},
+{
+  pergunta: "Quantas medalhas foram concedidas, ao total, a atletas do time de basquete da Iugoslávia até o ano de 2016?",
+  buscarResposta: atletas => (alternativas = undefined) =>{
+    const medalhasIugoslavia = atletas.filter(atleta => atleta.team == "Yugoslavia" && atleta.sex == "M" && atleta.year <= 2016 && atleta.medal != "NA").length 
+    // 60 medalhas
+    const outrasAlternativas = [70,50,77,55];
+    const corte = alternativas != undefined ? alternativas : outrasAlternativas.length + 1;
+    const resposta = [...[medalhasIugoslavia, ...outrasAlternativas].slice(0, corte).sort((a,b) => a - b)];
+    return resposta;
+  },
+  pontos: 1
+},
+{
+  pergunta: "Quem foi o primeiro país a ganhar uma medalha de ouro no basquete feminino nas Olimpíadas?",
+  buscarResposta: atletas => (alternativas = undefined) =>{
+    const ouroFeminino = [...atletas.filter(atleta => atleta.medal == "Gold" && atleta.sex == "F")
+                                .reduce((acc, atleta) => {
+                                  index = acc.findIndex(x => x.team == atleta.team);
+                                  if(index == -1){
+                                    acc = [...acc, atleta];
+                                  }
+                                  return acc;
+                                }, [])]
+                                        .map(x => [x.team, x.year]);
+                                // resposta é a União Soviética em 1976
+    const corte = alternativas != undefined ? alternativas : ouroFeminino.length + 1;
+    const resposta = ([...ouroFeminino.map(x => x[0]), 'Great Britain']).slice(0, corte);
+    return resposta
+  },
+  pontos: 1
+}
+];
 
-    // listarNomeDosAtletasSemRepetir = (lista) => {
-    //     return lista[0].filter((elemento, indice) => {
-    //         // Se for o primeiro elemento, ou se o elemento atual for diferente do anterior, mantenha-o
-    //         if (indice == 0 || elemento.id != lista[0][indice - 1].id) {
-    //             return true;
-    //         }
-    //         // Se o elemento atual for igual ao anterior, ignore-o (retorna false no filter)
-    //         return false;
-    //     });
-    // };
+// Função para buscar a resposta correta para uma pergunta
+const buscarRespostaCorreta = (atletas,pergunta) => pergunta.buscarResposta(atletas)(1);
 
- // --- [Função de manipulação de dados] -----------------------------------------------   
+const questionContainer = document.getElementById("question-container");
+const feedbackContainer = document.getElementById("feedback-container");
+const scoreContainer = document.getElementById("score-container");
+const questionText = document.getElementById("question-text");
+const answerForm = document.getElementById("answer-form");
+const feedbackText = document.getElementById("feedback-text");
+const nextQuestionBtn = document.getElementById("next-question-btn");
+const scoreCorrect = document.getElementById("score-correct");
+const scoreIncorrect = document.getElementById("score-incorrect");
 
-    const ManipulaDadosOlimpiadas = (novasLinhas) => {
-    //    console.log(listarNomeDosAtletasSemRepetir(novasLinhas));
-    //    console.log(pessoaMaisAlta(novasLinhas)); // Encontra a pessoa mais alta, 1º questão
-    //     console.log(filtraPrimeiraMulherMedalhaEsporte(novasLinhas)('Bronze')('Football')); // Filtra as mulheres que ganharam medalhas de ouro no esporte de atletismo, 1º questão
-    //    console.log(filtraPrimeiraMulherMedalhaEsporte(novasLinhas)('Gold')('Diving')); // Filtra as mulheres que ganharam medalhas de ouro no esporte de mergulho, 1º questão
+let currentQuestionIndex = 0;
+let totalPontos = 0;
+let correctAnswers = 0;
+let incorrectAnswers = 0;
 
-    }
+const mostrarProximaPergunta = () => {
+currentQuestionIndex++;
+if (currentQuestionIndex < perguntas.length) {
+  exibirPergunta(perguntas[currentQuestionIndex], csvCleaned);
+} else {
+  questionContainer.style.display = "none";
+  feedbackContainer.style.display = "none";
+  scoreContainer.style.display = "block";
+  scoreCorrect.textContent = `Respostas corretas: ${correctAnswers}`;
+  scoreIncorrect.textContent = `Respostas incorretas: ${incorrectAnswers}`;
+  feedbackText.textContent = correctAnswers == perguntas.length ? "Parabéns, você acertou todas as perguntas!" : "Você errou algumas perguntas, tente novamente!";
+}
+}
+
+const exibirPergunta = (pergunta, processCSV) => {
+questionText.textContent = pergunta.pergunta;
+answerForm.innerHTML = "";
+const respostaCorreta = buscarRespostaCorreta(processCSV, pergunta);
+const respostasPossiveis = [...new Set(pergunta.buscarResposta(processCSV)())];
+respostasPossiveis.map(resposta => {
+  const input = document.createElement("input");
+  input.type = "radio";
+  input.name = "answer";
+  input.value = resposta;
+  const label = document.createElement("label");
+  label.textContent = resposta;
+  label.appendChild(input);
+  answerForm.appendChild(label);
+  answerForm.appendChild(document.createElement("br"));
+});
+feedbackText.textContent = "";
+nextQuestionBtn.style.display = "block";
+}
+
+answerForm.addEventListener("submit", (event) => {
+event.preventDefault();
+const respostaUsuario = document.querySelector("input[name='answer']:checked");
+if (respostaUsuario) {
+  const resposta = respostaUsuario.value;
+  console.log(resposta)
+  const perguntaAtual = perguntas[currentQuestionIndex];
+  const respostaCorreta = buscarRespostaCorreta(csvCleaned, perguntaAtual);
+  console.log(respostaCorreta);
+  if (resposta == respostaCorreta) {
+    feedbackText.textContent = "Resposta correta!";
+    correctAnswers++;
+    totalPontos += perguntaAtual.pontos;
+  } else {
+    feedbackText.textContent = "Resposta incorreta. Tente novamente.";
+    incorrectAnswers++;
+  }
+  nextQuestionBtn.style.display = "block";
+} else {
+  feedbackText.textContent = "Por favor, selecione uma resposta.";
+}
+});
+
+nextQuestionBtn.addEventListener("click", mostrarProximaPergunta);
+
+
+  exibirPergunta(perguntas[currentQuestionIndex], csvCleaned);
+}
+
+
