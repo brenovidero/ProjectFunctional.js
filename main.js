@@ -96,7 +96,7 @@ const perguntas = [
       return contador;
     }, {}); // Estados Unidos ganharam 174 medalhas de ouro, se dividir pela quantidade de vezes (174/14), temos aproximadamente 12 atletas com medalhas em cada ano, ou seja está correto
     const corte = alternativas != undefined ? alternativas : medalhasOuroPorPais.length;
-    const paisComMaisOuro = Object.keys(medalhasOuroPorPais).slice(0, corte);
+    const paisComMaisOuro = Object.keys(medalhasOuroPorPais).slice(0, alternativas !== undefined ? alternativas : Object.keys(medalhasOuroPorPais).length);
     return paisComMaisOuro;
   },
   pontos: 1
@@ -183,6 +183,7 @@ const feedbackText = document.getElementById("feedback-text");
 const nextQuestionBtn = document.getElementById("next-question-btn");
 const scoreCorrect = document.getElementById("score-correct");
 const scoreIncorrect = document.getElementById("score-incorrect");
+const restartQuizbtn = document.getElementById("restart-quiz-btn")
 
 let currentQuestionIndex = 0;
 let totalPontos = 0;
@@ -190,18 +191,36 @@ let correctAnswers = 0;
 let incorrectAnswers = 0;
 
 const mostrarProximaPergunta = () => {
-currentQuestionIndex++;
-if (currentQuestionIndex < perguntas.length) {
+  const respostaUsuario = document.querySelector("input[name='answer']:checked");
+  
+  if (respostaUsuario) {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < perguntas.length) {
+      exibirPergunta(perguntas[currentQuestionIndex], csvCleaned);
+    } else {
+      questionContainer.style.display = "none";
+      feedbackContainer.style.display = "none";
+      scoreContainer.style.display = "block";
+      scoreCorrect.textContent = `Respostas corretas: ${correctAnswers}`;
+      scoreIncorrect.textContent = `Respostas incorretas: ${incorrectAnswers}`;
+      feedbackText.textContent = correctAnswers == perguntas.length ? "Parabéns, você acertou todas as perguntas!" : "Você errou algumas perguntas, tente novamente!";
+    }
+  } else {
+    feedbackText.textContent = "Por favor, selecione uma resposta antes de avançar para a próxima pergunta.";
+  }
+}
+
+const reiniciarQuiz = () => {
+  currentQuestionIndex = 0;
+  totalPontos = 0;
+  correctAnswers = 0;
+  incorrectAnswers = 0;
   exibirPergunta(perguntas[currentQuestionIndex], csvCleaned);
-} else {
-  questionContainer.style.display = "none";
+  scoreContainer.style.display = "none";
   feedbackContainer.style.display = "none";
-  scoreContainer.style.display = "block";
-  scoreCorrect.textContent = `Respostas corretas: ${correctAnswers}`;
-  scoreIncorrect.textContent = `Respostas incorretas: ${incorrectAnswers}`;
-  feedbackText.textContent = correctAnswers == perguntas.length ? "Parabéns, você acertou todas as perguntas!" : "Você errou algumas perguntas, tente novamente!";
-}
-}
+  questionContainer.style.display = "block";
+};
+restartQuizbtn.addEventListener("click", reiniciarQuiz)
 
 const exibirPergunta = (pergunta, processCSV) => {
 questionText.textContent = pergunta.pergunta;
