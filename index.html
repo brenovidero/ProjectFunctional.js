@@ -1,127 +1,37 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Olimpíadas Interativas</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <!-- FontAwesome para ícones -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
-    <!-- Estilos personalizados -->
-    <link rel="stylesheet" href="estilos.css">
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quizz sobre Basquete</title>
+<style>
+</style>
 </head>
 <body>
-    <header class="text-center p-4">
-        <h1> Olimpíadas Interativas</h1>
-        <p class="introdutorio">Teste o seu <span class="mudar-cor">conhecimento!!</span></p>
-    </header>
-    <main class="container my-5">
-        <section id="interactive-questions">
-            <div class="modal-rules">
-            </div>
-            <!-- Pergunta 1 -->
-            <div class="question-container">
-                <p class="question-title"><i class="fas fa-question-circle animated-question-mark" data-toggle="modal" data-target="#regrasModal"></i> Quantos atletas ganharam medalhas em mais de um esporte?</p>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Digite sua resposta" aria-label="Recipient's username" aria-describedby="button-addon2">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Enviar</button>
-                    </div>
-                </div>
-                <div id="response1" class="response-container">
-                    <!-- A resposta será exibida aqui -->
-                </div>
-            </div>
-            <!-- Adicione mais perguntas aqui -->
-            <!-- Pergunta 2 -->
-            <div class="question-container">
-                <p class="question-title"><i class="fas fa-question-circle animated-question-mark" data-toggle="modal" data-target="#regrasModal"></i> Quantos atletas ganharam medalhas em mais de um esporte?</p>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Digite sua resposta" aria-label="Recipient's username" aria-describedby="button-addon2">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Enviar</button>
-                    </div>
-                </div>
-                <div id="response1" class="response-container">
-                    <!-- A resposta será exibida aqui -->
-                </div>
-            </div>
-            <!-- Pergunta 3 -->
-            <div class="question-container">
-                <p class="question-title"><i class="fas fa-question-circle animated-question-mark" data-toggle="modal" data-target="#regrasModal"></i> Quantos atletas ganharam medalhas em mais de um esporte?</p>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Digite sua resposta" aria-label="Recipient's username" aria-describedby="button-addon2">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Enviar</button>
-                    </div>
-                </div>
-                <div id="response1" class="response-container">
-                    <!-- A resposta será exibida aqui -->
-                </div>
-            </div>
-            <!-- Pergunta 4 -->
-            <div class="question-container">
-                <p class="question-title"><i class="fas fa-question-circle animated-question-mark" data-toggle="modal" data-target="#regrasModal"></i> Quantos atletas ganharam medalhas em mais de um esporte?</p>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Digite sua resposta" aria-label="Recipient's username" aria-describedby="button-addon2">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Enviar</button>
-                    </div>
-                </div>
-                <div id="response1" class="response-container">
-                    <!-- A resposta será exibida aqui -->
-                </div>
-            </div>
-            <!-- Pergunta 5 -->
-            <div class="question-container">
-                <p class="question-title"><i class="fas fa-question-circle animated-question-mark" data-toggle="modal" data-target="#regrasModal"></i> Quantos atletas ganharam medalhas em mais de um esporte?</p>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Digite sua resposta" aria-label="Recipient's username" aria-describedby="button-addon2">
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Enviar</button>
-                    </div>
-                </div>
-                <div id="response1" class="response-container">
-                    <!-- A resposta será exibida aqui -->
-                </div>
-            </div>
-        </section>
-    </main>
 
-    <!-- Modal para as regras -->
-    <div class="modal fade" id="regrasModal" tabindex="-1" role="dialog" aria-labelledby="regrasModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="regrasModalLabel">Regras</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <!-- Insira as regras aqui -->
-                    DIGITE EM INGLÊS, APENAS UTILIZE LETRAS MAIÚSCULAS, UTILIZE APENAS SIGLAS PARA REPRESENTAR OS PAÍSES EXEMPLO “BRA” DE BRASIL.
+<h1>Quizz sobre Basquete</h1>
 
-                    <div id="typed-rules"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                </div>
-            </div>
-        </div>
-    </div>
+<div id="question-container">
+  <h2 id="question-text">Pergunta aqui</h2>
+  <form id="answer-form">
+  </form>
+  <p id="feedback-text"></p>
+  <button id="next-question-btn">Próxima Pergunta</button>
+</div>
 
-    <footer class="text-center p-3">
-        <p class="modal-body uppercase">Desenvolvido por <strong>Adley Breno de Melo Morais, José Gustavo Ramos Silva, Vitor Leonardo Sena De Lima</strong></p>
-    </footer>
+<div id="feedback-container" style="display: none;">
+  <p id="score-correct"></p>
+  <p id="score-incorrect"></p>
+  <button id="restart-quiz-btn">Refazer Quizz</button>
+</div>
 
+<div id="score-container" style="display: none;">
+  <p id="score-correct"></p>
+  <p id="score-incorrect"></p>
+  <button id="restart-quiz-btn">Refazer Quizz</button>
+</div>
 
-    <script src="main.js"></script>
-    <!-- Bootstrap e jQuery -->
+<script src="main.js"></script>
 
-    <script src="style.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
