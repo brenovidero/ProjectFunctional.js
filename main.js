@@ -1,7 +1,7 @@
 
 document.addEventListener("DOMContentLoaded",  () => {
   // Caminho para o arquivo CSV dentro do diretório do programa
-  const filePath = './arquivosCSV/athlete_events.csv';
+  const filePath = './arquivosCSV/athlete_events.csv'
   // Função para carregar e processar o arquivo CSV
   const processarCSV = () => {
     fetch(filePath) // Faz uma requisição GET para o arquivo CSV, ou seja, busca o arquivo no servidor e retorna uma Promise com a resposta
