@@ -97,6 +97,7 @@ const recebeListaAtletas = (csvCleaned) => {
         }, {}); // Estados Unidos ganharam 174 medalhas de ouro, se dividir pela quantidade de vezes (174/14), temos aproximadamente 12 atletas com medalhas em cada ano, ou seja está correto
         const corte = alternativas != undefined ? alternativas : medalhasOuroPorPais.length;
         const paisComMaisOuro = Object.keys(medalhasOuroPorPais).slice(0, alternativas !== undefined ? alternativas : Object.keys(medalhasOuroPorPais).length);
+        console.log(paisComMaisOuro)
         return paisComMaisOuro;
       },
       pontos: 1
@@ -112,11 +113,12 @@ const recebeListaAtletas = (csvCleaned) => {
             }
             return acc;
           }, []).length; // Ganharam 14 vezes
-        const outrasAlternativas = [9, 10, 13, 16]
-        const corte = alternativas != undefined ? alternativas : outrasAlternativas.length + 1;
-        const resposta = [...[ouroEUA, ...outrasAlternativas].slice(0, corte).sort((a, b) => a - b)];
-        return resposta;
-      },
+          const outrasAlternativas = [9, 10, 13, 16]
+          const corte = alternativas != undefined ? alternativas : outrasAlternativas.length + 1;
+          const resposta = [...[ouroEUA, ...outrasAlternativas].slice(0, corte).sort((a, b) => a - b)];
+          console.log(resposta)
+          return resposta;
+        },
       pontos: 1
     },
     {
@@ -134,6 +136,7 @@ const recebeListaAtletas = (csvCleaned) => {
         const corte = alternativas != undefined ? alternativas : paisesComOuro.length + 2;
         const outrasAlternativas = [1, 2, 5, 8];
         const resposta = [...[qtdPaisesComOuro, ...outrasAlternativas]].slice(0, corte).sort((a, b) => a - b);
+        console.log(resposta)
         return resposta;
       },
       pontos: 1
@@ -146,6 +149,7 @@ const recebeListaAtletas = (csvCleaned) => {
         const outrasAlternativas = [70, 50, 77, 55];
         const corte = alternativas != undefined ? alternativas : outrasAlternativas.length + 1;
         const resposta = [...[medalhasIugoslavia, ...outrasAlternativas].slice(0, corte).sort((a, b) => a - b)];
+        console.log(resposta)
         return resposta;
       },
       pontos: 1
@@ -162,10 +166,11 @@ const recebeListaAtletas = (csvCleaned) => {
             return acc;
           }, [])]
           .map(x => [x.team, x.year]);
+          console.log(ouroFeminino)
         // resposta é a União Soviética em 1976
-        const corte = alternativas != undefined ? alternativas : ouroFeminino.length + 1;
-        const resposta = ([...ouroFeminino.map(x => x[0]), 'Great Britain']).slice(0, corte);
-        return resposta
+        const resultado = ouroFeminino[2][0];
+        const corte = alternativas != undefined ? resultado : ([...ouroFeminino.map(x => x[0]), 'Great Britain']).slice(0, 4);
+        return corte
       },
       pontos: 1
     }
