@@ -176,6 +176,24 @@ const recebeListaAtletas = (csvCleaned) => {
     }
   ];
 
+  const selecionaAlternativa = () => { // Função para estilizar a alternativa selecionada
+    const answerLabels = document.querySelectorAll('#answer-form label'); // Selecionando todos os labels dentro do formulário de respostas
+    // Adicionando um evento de clique para cada label
+    [...answerLabels].map(label => { // Transformando a NodeList em um array para utilizar o método map
+      label.addEventListener('click', () => { // Adicionando um evento de clique para cada label
+        // Remover a classe 'selected' de todos os labels
+        [...answerLabels].map(label => { // Transformando a NodeList em um array para utilizar o método map
+          label.classList.remove('selected'); // Removendo a classe 'selected' de todos os labels
+        });
+    
+        // Adicionar a classe 'selected' ao label clicado
+        label.classList.add('selected'); // Adicionando a classe 'selected' ao label clicado
+      });
+    });
+
+
+  }
+
   // Função para buscar a resposta correta para uma pergunta
   const buscarRespostaCorreta = (atletas, pergunta) => pergunta.buscarResposta(atletas)(1);
 
@@ -243,7 +261,6 @@ const recebeListaAtletas = (csvCleaned) => {
   const exibirPergunta = (pergunta, processCSV) => {
     questionText.textContent = pergunta.pergunta;
     answerForm.innerHTML = "";
-    const respostaCorreta = buscarRespostaCorreta(processCSV, pergunta);
     const respostasPossiveis = [...new Set(pergunta.buscarResposta(processCSV)())];
     respostasPossiveis.map(resposta => {
       const input = document.createElement("input");
@@ -256,6 +273,7 @@ const recebeListaAtletas = (csvCleaned) => {
       answerForm.appendChild(label);
       answerForm.appendChild(document.createElement("br"));
     });
+    selecionaAlternativa();
     feedbackText.textContent = "";
     nextQuestionBtn.style.display = "block";
   }
@@ -283,10 +301,10 @@ const recebeListaAtletas = (csvCleaned) => {
     }
   });
 
+  exibirPergunta(perguntas[currentQuestionIndex], csvCleaned);
   nextQuestionBtn.addEventListener("click", mostrarProximaPergunta);
 
 
-  exibirPergunta(perguntas[currentQuestionIndex], csvCleaned);
 }
 
 

@@ -1,156 +1,109 @@
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #121212;
-    color: #e0e0e0;
-}
-/* Estilo para o texto em maiúsculas */
-.uppercase {
-    text-transform: uppercase;
-}
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+  }
 
-header, footer {
-    background-color: #1f1f1f;
-    color: #e0e0e0;
-}
+ #quizSobreBasquete{
+    text-align: center;
+    background-color: #52e579;
+    width: 40%;
+    translate: 75%;
+    border-radius: 15px;
+  }
 
-/* Efeito de gradiente para o título h1 com roxo e preto */
-h1 {
-    background: linear-gradient(to right, #bb86fc, #121212);
-    -webkit-background-clip: text;
-    color: transparent;
-    animation: gradient-animation 5s ease infinite;
-}
+  #question-text{
+    text-align: center;
+    border-bottom: 2px solid #8e8e8e;
+  }
 
-/* Animação do gradiente para o título h1 */
-@keyframes gradient-animation {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-/* Efeito de sombra para os títulos */
-h1{
-    text-shadow: 2px 2px 4px #000000;
-}
-
-/* Efeito de zoom ao passar o mouse nos títulos */
-h1:hover{
-    transform: scale(1.05);
-    transition: transform 0.3s ease;
-}
-
-/* Estilo para o parágrafo da classe 'introdutorio' */
-.introdutorio {
-    font-size: 1.2em;
-    color: #dcdcdc;
-    text-shadow: 1px 1px 2px #000000;
-}
-
-/* Efeito de 'digitação' para a frase 'descubra os dados' */
-.mudar-cor{
-    color: #bb86fc;
-}
-
-/* Animação de 'piscar' para o efeito de 'digitação' */
-@keyframes blink-caret {
-    from, to { border-color: transparent }
-    50% { border-color: #bb86fc; }
-}
-
-/* Animação de 'digitação' */
-@keyframes typing {
-    from { width: 0 }
-    to { width: 14ch }
-}
-
-/* Adiciona um efeito de transição suave ao passar o mouse */
-.btn-secondary {
-    transition: background-color 0.3s ease;
-}
-
-.question-container {
-    background-color: #1e1e1e;
-    border-radius: 5px;
+  #question-container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    margin-bottom: 15px;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-}
-.question-title {
-    font-size: 1.5em;
-    color: #bb86fc;
-}
-.response-container {
-    background-color: #252525;
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    min-height: 50px;
-    color: #e0e0e0;
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
-}
-.input-group-text {
-    background-color: #bb86fc;
-    border: none;
-    color: #121212;
-}
-.btn-outline-secondary {
-    border: none;
-    background-color: #bb86fc;
-    color: #121212;
-    transition: background-color 0.3s ease;
-}
-.btn-outline-secondary:hover {
-    background-color: #3700b3;
-    color: #e0e0e0;
-}
-/* Estilos adicionados para a animação da interrogação */
-@keyframes question-mark-animation {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0); }
-}
-.animated-question-mark {
-    animation: question-mark-animation 2s infinite;
-    position: relative;
-}
-.animated-question-mark {
+    margin: 20px auto;
+    max-width: 600px;
+  }
+
+  #answer-form label {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  #answer-form input[type="radio"] {
+    display: none;
+  }
+
+  #answer-form label {
     cursor: pointer;
-}
-/* Estilos para o modal de regras */
-.modal-content {
-    background-color: rgba(39, 39, 39, 0.9);
-    color: #ffffff;
+    padding: 10px;
     border-radius: 5px;
-    padding: 20px;
-    transition: opacity 0.5s ease, transform 0.5s ease-out;
-    opacity: 1; /* Corrigido para garantir visibilidade */
-    transform: translateY(0); /* Corrigido para garantir a posição correta */
-    display: block; /* Corrigido para garantir que o modal seja exibido */
-}
-/* Animação de digitação */
-@keyframes typing {
-    from { width: 0; }
-    to { width: 100%; }
-}
-/* Aplica a animação ao corpo do modal */
-.modal-body {
-    font-family: 'Courier New', Courier, monospace;
-    position: relative;
-    overflow: hidden;
-    border-right: .15em solid #ffffff;
-    white-space: normal; /* Permite quebra de linha */
-    width: 100%;
-    animation: typing 3.5s steps(40, end) forwards;
-}
-/* Botão personalizado no modal */
-.btn-secondary {
-    background-color: #6f42c1;
-    border: none;
-}
-.btn-secondary:hover {
-    background-color: #5a32a3;
-}
-/* Adiciona um efeito de transição suave ao passar o mouse */
-.btn-secondary {
     transition: background-color 0.3s ease;
-}
+  }
+
+  #answer-form label.selected {
+    background-color: #52e579;
+  }
+
+  #answer-form label:hover {
+    background-color: #52e579;
+  }
+
+  #next-question-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4caf50;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  #next-question-btn:hover {
+    background-color: #388e3c;
+  }
+
+  #feedback-container, #score-container {
+    text-align: center;
+    margin: 20px auto;
+  }
+
+  #score-container p {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  #score-container #score-correct {
+    color: #4caf50;
+  }
+
+  #score-container #score-incorrect {
+    color: #f44336;
+  }
+
+  #restart-quiz-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #f44336;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  #restart-quiz-btn:hover {
+    background-color: #d32f2f;
+  }
+
+  #q-quiz{
+    justify-content: center;
+    align-items: center;
+    margin-bottom: -50px;
+    margin-right: -7px;
+  }
