@@ -113,12 +113,12 @@ const recebeListaAtletas = (csvCleaned) => {
             }
             return acc;
           }, []).length; // Ganharam 14 vezes
-        const outrasAlternativas = [9, 10, 13, 16]
-        const corte = alternativas != undefined ? alternativas : outrasAlternativas.length + 1;
-        const resposta = [...[ouroEUA, ...outrasAlternativas].slice(0, corte).sort((a, b) => a - b)];
-        console.log(resposta)
-        return resposta;
-      },
+          const outrasAlternativas = [9, 10, 13, 16]
+          const corte = alternativas != undefined ? alternativas : outrasAlternativas.length + 1;
+          const resposta = [...[ouroEUA, ...outrasAlternativas].slice(0, corte).sort((a, b) => a - b)];
+          console.log(resposta)
+          return resposta;
+        },
       pontos: 1
     },
     {
@@ -166,7 +166,7 @@ const recebeListaAtletas = (csvCleaned) => {
             return acc;
           }, [])]
           .map(x => [x.team, x.year]);
-        console.log(ouroFeminino)
+          console.log(ouroFeminino)
         // resposta é a União Soviética em 1976
         const resultado = ouroFeminino[2][0];
         const corte = alternativas != undefined ? resultado : ([...ouroFeminino.map(x => x[0]), 'Great Britain']).slice(0, 4);
@@ -185,7 +185,7 @@ const recebeListaAtletas = (csvCleaned) => {
         [...answerLabels].map(label => { // Transformando a NodeList em um array para utilizar o método map
           label.classList.remove('selected'); // Removendo a classe 'selected' de todos os labels
         });
-
+    
         // Adicionar a classe 'selected' ao label clicado
         label.classList.add('selected'); // Adicionando a classe 'selected' ao label clicado
       });
@@ -278,8 +278,6 @@ const recebeListaAtletas = (csvCleaned) => {
     nextQuestionBtn.style.display = "block";
   }
 
-<<<<<<< HEAD
-=======
   answerForm.addEventListener("submit", (event) => {
     event.preventDefault();
     const respostaUsuario = document.querySelector("input[name='answer']:checked");
@@ -304,10 +302,7 @@ const recebeListaAtletas = (csvCleaned) => {
   });
 
   exibirPergunta(perguntas[currentQuestionIndex], csvCleaned);
->>>>>>> 6e500062d70a598b828ae5025228f16de7fd10d1
   nextQuestionBtn.addEventListener("click", mostrarProximaPergunta);
 
 
 }
-
-
