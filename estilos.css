@@ -1,110 +1,111 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    margin: 0;
-    padding: 0;
-  }
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+}
 
- #quizSobreBasquete{
-    text-align: center;
-    background-color: #52e579;
-    width: 40%;
-    translate: 75%;
-    border-radius: 15px;
-  }
+#quizSobreBasquete {
+  text-align: center;
+  background-color: #52e579;
+  width: 40%;
+  translate: 75%;
+  border-radius: 15px;
+}
 
-  #question-text{
-    text-align: center;
-    border-bottom: 2px solid #8e8e8e;
-  }
+#question-text {
+  text-align: center;
+  border-bottom: 2px solid #8e8e8e;
+}
 
-  #question-container {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    margin: 20px auto;
-    max-width: 600px;
-  }
+#question-container {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 600px;
+}
 
-  #answer-form label {
-    display: block;
-    margin-bottom: 10px;
-  }
+#answer-form label {
+  display: block;
+  margin-bottom: 10px;
+}
 
-  #answer-form input[type="radio"] {
-    display: none;
-  }
+#answer-form input[type="radio"] {
+  display: none;
+}
 
-  #answer-form label {
-    cursor: pointer;
-    padding: 10px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-  }
+#answer-form label {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
 
-  #answer-form label.selected {
-    background-color: #52e579;
-  }
+#answer-form label.selected {
+  background-color: #52e579;
+}
 
-  #answer-form label:hover {
-    background-color: #52e579;
-  }
+#answer-form label:hover {
+  background-color: #52e579;
+}
 
-  #next-question-btn {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #4caf50;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
+#next-question-btn {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4caf50;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
-  #next-question-btn:hover {
-    background-color: #388e3c;
-  }
+#next-question-btn:hover {
+  background-color: #388e3c;
+}
 
-  #feedback-container, #score-container {
-    text-align: center;
-    margin: 20px auto;
-  }
+#feedback-container,
+#score-container {
+  text-align: center;
+  margin: 20px auto;
+}
 
-  #score-container p {
-    font-size: 20px;
-    margin-bottom: 10px;
-  }
+#score-container p {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
 
-  #score-container #score-correct {
-    color: #4caf50;
-  }
+#score-container #score-correct {
+  color: #4caf50;
+}
 
-  #score-container #score-incorrect {
-    color: #f44336;
-  }
+#score-container #score-incorrect {
+  color: #f44336;
+}
 
-  #restart-quiz-btn {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #f44336;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
+#restart-quiz-btn {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #f44336;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
-  #restart-quiz-btn:hover {
-    background-color: #d32f2f;
-  }
+#restart-quiz-btn:hover {
+  background-color: #d32f2f;
+}
 
-  #q-quiz{
-    justify-content: center;
-    align-items: center;
-    margin-bottom: -50px;
-    margin-right: -7px;
-    width: 90px;
-  }
+#q-quiz {
+  justify-content: center;
+  align-items: center;
+  margin-bottom: -50px;
+  margin-right: -7px;
+  width: 90px;
+}
