@@ -255,29 +255,6 @@ const recebeListaAtletas = (csvCleaned) => {
     nextQuestionBtn.style.display = "block";
   }
 
-  answerForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const respostaUsuario = document.querySelector("input[name='answer']:checked");
-    if (respostaUsuario) {
-      const resposta = respostaUsuario.value;
-      console.log(resposta)
-      const perguntaAtual = perguntas[currentQuestionIndex];
-      const respostaCorreta = buscarRespostaCorreta(csvCleaned, perguntaAtual);
-      console.log(respostaCorreta);
-      if (resposta == respostaCorreta) {
-        feedbackText.textContent = "Resposta correta!";
-        correctAnswers++;
-        totalPontos += perguntaAtual.pontos;
-      } else {
-        feedbackText.textContent = "Resposta incorreta. Tente novamente.";
-        incorrectAnswers++;
-      }
-      nextQuestionBtn.style.display = "block";
-    } else {
-      feedbackText.textContent = "Por favor, selecione uma resposta.";
-    }
-  });
-
   nextQuestionBtn.addEventListener("click", mostrarProximaPergunta);
 
 
