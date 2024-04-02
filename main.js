@@ -87,17 +87,17 @@ document.addEventListener("DOMContentLoaded", () => {
 // Declaração de variáveis
 // Array de perguntas com as funções de alta ordem para buscar a resposta correta
 const recebeListaAtletas = (csvCleaned) => {
+
   const perguntas = [
     {
       pergunta: "Qual foi o país que conquistou o maior número de medalhas de ouro no basquete masculino até 2014?",
       buscarResposta: (atletas) => (alternativas = undefined) => {
         const medalhasOuroPorPais = atletas.filter(atleta => atleta.medal == "Gold" && atleta.sex == "M" && atleta.year < 2014).reduce((contador, atleta) => {
-          contador[atleta.team] = (contador[atleta.team] || 0) + 1;
+          contador[atleta.team] = (contador[atleta.team] || 0) + 1; // Conta a quantidade de medalhas de ouro por país
           return contador;
         }, {}); // Estados Unidos ganharam 174 medalhas de ouro, se dividir pela quantidade de vezes (174/14), temos aproximadamente 12 atletas com medalhas em cada ano, ou seja está correto
-        const corte = alternativas != undefined ? alternativas : medalhasOuroPorPais.length;
-        const paisComMaisOuro = Object.keys(medalhasOuroPorPais).slice(0, alternativas !== undefined ? alternativas : Object.keys(medalhasOuroPorPais).length);
-        console.log(paisComMaisOuro)
+        const corte = alternativas !== undefined ? alternativas : Object.keys(medalhasOuroPorPais).length
+        const paisComMaisOuro = Object.keys(medalhasOuroPorPais).slice(0, corte);
         return paisComMaisOuro;
       },
       pontos: 1
@@ -105,6 +105,7 @@ const recebeListaAtletas = (csvCleaned) => {
     {
       pergunta: "Quantas vezes as equipes dos Estados Unidos ganharam a medalha de ouro no basquete masculino até 2016?",
       buscarResposta: atletas => (alternativas = undefined) => {
+        // ouroEUA faz um filtro para pegar os atletas que ganharam medalha de ouro, são dos Estados Unidos, são do sexo masculino e o ano é menor que 2016
         const ouroEUA = atletas.filter(atleta => atleta.medal == "Gold" && atleta.team == "United States" && atleta.sex == "M" && atleta.year < 2016)
           .reduce((acc, atletas) => {
             index = acc.findIndex(x => x.year == atletas.year);
@@ -116,7 +117,6 @@ const recebeListaAtletas = (csvCleaned) => {
           const outrasAlternativas = [9, 10, 13, 16]
           const corte = alternativas != undefined ? alternativas : outrasAlternativas.length + 1;
           const resposta = [...[ouroEUA, ...outrasAlternativas].slice(0, corte).sort((a, b) => a - b)];
-          console.log(resposta)
           return resposta;
         },
       pontos: 1
@@ -136,7 +136,6 @@ const recebeListaAtletas = (csvCleaned) => {
         const corte = alternativas != undefined ? alternativas : paisesComOuro.length + 2;
         const outrasAlternativas = [1, 2, 5, 8];
         const resposta = [...[qtdPaisesComOuro, ...outrasAlternativas]].slice(0, corte).sort((a, b) => a - b);
-        console.log(resposta)
         return resposta;
       },
       pontos: 1
@@ -149,7 +148,6 @@ const recebeListaAtletas = (csvCleaned) => {
         const outrasAlternativas = [70, 50, 77, 55];
         const corte = alternativas != undefined ? alternativas : outrasAlternativas.length + 1;
         const resposta = [...[medalhasIugoslavia, ...outrasAlternativas].slice(0, corte).sort((a, b) => a - b)];
-        console.log(resposta)
         return resposta;
       },
       pontos: 1
@@ -166,7 +164,6 @@ const recebeListaAtletas = (csvCleaned) => {
             return acc;
           }, [])]
           .map(x => [x.team, x.year]);
-          console.log(ouroFeminino)
         // resposta é a União Soviética em 1976
         const resultado = ouroFeminino[2][0];
         const corte = alternativas != undefined ? resultado : ([...ouroFeminino.map(x => x[0]), 'Great Britain']).slice(0, 4);
@@ -188,6 +185,8 @@ const recebeListaAtletas = (csvCleaned) => {
     
         // Adicionar a classe 'selected' ao label clicado
         label.classList.add('selected'); // Adicionando a classe 'selected' ao label clicado
+        nextQuestionBtn.style.display = "block"; // Exibindo o botão de próxima pergunta
+
       });
     });
 
@@ -209,46 +208,37 @@ const recebeListaAtletas = (csvCleaned) => {
   const restartQuizbtn = document.getElementById("restart-quiz-btn")
 
   let currentQuestionIndex = 0;
-  let totalPontos = 0;
   let correctAnswers = 0;
   let incorrectAnswers = 0;
 
   const mostrarProximaPergunta = () => {
     const respostaUsuario = document.querySelector("input[name='answer']:checked");
 
-    if (respostaUsuario) {
       const resposta = respostaUsuario.value;
-      console.log(resposta)
       const perguntaAtual = perguntas[currentQuestionIndex];
       const respostaCorreta = buscarRespostaCorreta(csvCleaned, perguntaAtual);
-      console.log(respostaCorreta);
+
       if (resposta == respostaCorreta) {
-        feedbackText.textContent = "Resposta correta!";
         correctAnswers++;
-        totalPontos += perguntaAtual.pontos;
       } else {
-        feedbackText.textContent = "Resposta incorreta. Tente novamente.";
         incorrectAnswers++;
       } // ate aq
       currentQuestionIndex++;
       if (currentQuestionIndex < perguntas.length) {
-        exibirPergunta(perguntas[currentQuestionIndex], csvCleaned);
+        exibirPergunta(perguntas[currentQuestionIndex], csvCleaned);      
       } else {
         questionContainer.style.display = "none";
-        //feedbackContainer.style.display = "none";
+        feedbackContainer.style.display = "block";
         scoreContainer.style.display = "block";
-        scoreCorrect.textContent = `Respostas corretas: ${correctAnswers}`;// problema do score(elemento duplicado no html)
-        scoreIncorrect.textContent = `Respostas incorretas: ${incorrectAnswers}`;// problema do score(elemento duplicado no html)
-        feedbackText.textContent = correctAnswers == perguntas.length ? "Parabéns, você acertou todas as perguntas!" : "Você errou algumas perguntas, tente novamente!";
+        scoreCorrect.textContent = `Respostas corretas: ${correctAnswers}`;
+        scoreIncorrect.textContent = `Respostas incorretas: ${incorrectAnswers}`;
+        feedbackContainer.textContent = correctAnswers == perguntas.length ? "Parabéns, você acertou todas as perguntas!" : "Você errou algumas perguntas, tente novamente!";
       }
-    } else {
-      feedbackText.textContent = "Por favor, selecione uma resposta antes de avançar para a próxima pergunta.";
-    }
+    
   }
 
   const reiniciarQuiz = () => {
     currentQuestionIndex = 0;
-    totalPontos = 0;
     correctAnswers = 0;
     incorrectAnswers = 0;
     exibirPergunta(perguntas[currentQuestionIndex], csvCleaned);
@@ -261,7 +251,7 @@ const recebeListaAtletas = (csvCleaned) => {
   const exibirPergunta = (pergunta, processCSV) => {
     questionText.textContent = pergunta.pergunta;
     answerForm.innerHTML = "";
-    const respostasPossiveis = [...new Set(pergunta.buscarResposta(processCSV)())];
+    const respostasPossiveis = [...(pergunta.buscarResposta(processCSV)())];
     respostasPossiveis.map(resposta => {
       const input = document.createElement("input");
       input.type = "radio";
@@ -275,7 +265,7 @@ const recebeListaAtletas = (csvCleaned) => {
     });
     selecionaAlternativa();
     feedbackText.textContent = "";
-    nextQuestionBtn.style.display = "block";
+    nextQuestionBtn.style.display = "none";
   }
 
 
