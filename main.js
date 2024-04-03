@@ -226,6 +226,10 @@ const recebeListaAtletas = (csvCleaned) => {
         respostaSelecionada.style.color = 'green'; // Destaca a resposta selecionada como correta
       } else {
         incorrectAnswers++;
+        respostaSelecionada.style.color = 'red'; // Destaca a resposta selecionada como incorreta
+        // Encontrando a resposta correta e destacando-a
+        const correctLabel = Array.from(answerLabels).find(label => label.textContent === respostaCorreta);
+        correctLabel.style.color = 'green';
       } // ate aq
       currentQuestionIndex++;
       if (currentQuestionIndex < perguntas.length) {
