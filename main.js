@@ -218,8 +218,12 @@ const recebeListaAtletas = (csvCleaned) => {
       const perguntaAtual = perguntas[currentQuestionIndex];
       const respostaCorreta = buscarRespostaCorreta(csvCleaned, perguntaAtual);
 
+      const answerLabels = document.querySelectorAll('#answer-form label');
+      const respostaSelecionada = Array.from(answerLabels).find(label => label.classList.contains('selected'));
+
       if (resposta == respostaCorreta) {
         correctAnswers++;
+        respostaSelecionada.style.color = 'green'; // Destaca a resposta selecionada como correta
       } else {
         incorrectAnswers++;
       } // ate aq
