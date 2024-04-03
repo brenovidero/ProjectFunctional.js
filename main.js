@@ -230,7 +230,11 @@ const recebeListaAtletas = (csvCleaned) => {
         // Encontrando a resposta correta e destacando-a
         const correctLabel = Array.from(answerLabels).find(label => label.textContent === respostaCorreta);
         correctLabel.style.color = 'green';
-      } // ate aq
+      }
+          // Desativa seleção de respostas após escolha
+    answerForm.querySelectorAll('input').forEach(input => {
+      input.disabled = true;
+    });
       currentQuestionIndex++;
       if (currentQuestionIndex < perguntas.length) {
         exibirPergunta(perguntas[currentQuestionIndex], csvCleaned);      
