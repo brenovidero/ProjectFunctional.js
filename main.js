@@ -89,12 +89,12 @@ const recebeListaAtletas = (csvCleaned) => {
 
   const perguntas = [
     {
-      pergunta: "Qual foi o país que conquistou o maior número de medalhas de ouro no basquete masculino até 2014?",
+      pergunta: "Which country has won the most gold medals in men's basketball until 2014?",
       buscarResposta: (atletas) => (alternativas = undefined) => {
         const medalhasOuroPorPais = atletas.filter(atleta => atleta.medal == "Gold" && atleta.sex == "M" && atleta.year < 2014).reduce((contador, atleta) => {
-          contador[atleta.team] = (contador[atleta.team] || 0) + 1; // Conta a quantidade de medalhas de ouro por país
+          contador[atleta.team] = (contador[atleta.team] || 0) + 1;
           return contador;
-        }, {}); // Estados Unidos ganharam 174 medalhas de ouro, se dividir pela quantidade de vezes (174/14), temos aproximadamente 12 atletas com medalhas em cada ano, ou seja está correto
+        }, {});
         const corte = alternativas !== undefined ? alternativas : Object.keys(medalhasOuroPorPais).length
         const paisComMaisOuro = Object.keys(medalhasOuroPorPais).slice(0, corte);
         return paisComMaisOuro;
@@ -102,9 +102,8 @@ const recebeListaAtletas = (csvCleaned) => {
       pontos: 1
     },
     {
-      pergunta: "Quantas vezes as equipes dos Estados Unidos ganharam a medalha de ouro no basquete masculino até 2016?",
+      pergunta: "How many times has the United States men's basketball team won the gold medal until 2016?",
       buscarResposta: atletas => (alternativas = undefined) => {
-        // ouroEUA faz um filtro para pegar os atletas que ganharam medalha de ouro, são dos Estados Unidos, são do sexo masculino e o ano é menor que 2016
         const ouroEUA = atletas.filter(atleta => atleta.medal == "Gold" && atleta.team == "United States" && atleta.sex == "M" && atleta.year < 2016)
           .reduce((acc, atletas) => {
             index = acc.findIndex(x => x.year == atletas.year);
@@ -112,7 +111,7 @@ const recebeListaAtletas = (csvCleaned) => {
               acc = [...acc, atletas];
             }
             return acc;
-          }, []).length; // Ganharam 14 vezes
+          }, []).length;
           const outrasAlternativas = [9, 10, 13, 16]
           const corte = alternativas != undefined ? alternativas : outrasAlternativas.length + 1;
           const resposta = [...[ouroEUA, ...outrasAlternativas].slice(0, corte).sort((a, b) => a - b)];
@@ -121,7 +120,7 @@ const recebeListaAtletas = (csvCleaned) => {
       pontos: 1
     },
     {
-      pergunta: "Quantos países já ganharam medalhas de ouro no basquete masculino nas Olimpíadas até 1980?",
+      pergunta: "How many countries have won gold medals in men's basketball in the Olympics until 1980?",
       buscarResposta: atletas => (alternativas = undefined) => {
         const paisesComOuro = atletas.filter(atleta => atleta.medal == "Gold" && atleta.sex == "M" && atleta.year <= 1980)
           .reduce((acc, atleta) => {
@@ -131,7 +130,7 @@ const recebeListaAtletas = (csvCleaned) => {
             }
             return acc;
           }, []).map(x => x.team);
-        const qtdPaisesComOuro = paisesComOuro.length; // 3 países ganharam medalhas de ouro
+        const qtdPaisesComOuro = paisesComOuro.length;
         const corte = alternativas != undefined ? alternativas : paisesComOuro.length + 2;
         const outrasAlternativas = [1, 2, 5, 8];
         const resposta = [...[qtdPaisesComOuro, ...outrasAlternativas]].slice(0, corte).sort((a, b) => a - b);
@@ -140,10 +139,9 @@ const recebeListaAtletas = (csvCleaned) => {
       pontos: 1
     },
     {
-      pergunta: "Quantas medalhas foram concedidas, ao total, a atletas do time de basquete da Iugoslávia até o ano de 2016?",
+      pergunta: "How many medals have been awarded to athletes from the Yugoslavia basketball team until 2016?",
       buscarResposta: atletas => (alternativas = undefined) => {
         const medalhasIugoslavia = atletas.filter(atleta => atleta.team == "Yugoslavia" && atleta.sex == "M" && atleta.year <= 2016 && atleta.medal != "NA").length
-        // 60 medalhas
         const outrasAlternativas = [70, 50, 77, 55];
         const corte = alternativas != undefined ? alternativas : outrasAlternativas.length + 1;
         const resposta = [...[medalhasIugoslavia, ...outrasAlternativas].slice(0, corte).sort((a, b) => a - b)];
@@ -152,7 +150,7 @@ const recebeListaAtletas = (csvCleaned) => {
       pontos: 1
     },
     {
-      pergunta: "Quem foi o primeiro país a ganhar uma medalha de ouro no basquete feminino nas Olimpíadas?",
+      pergunta: "Which country was the first to win a gold medal in women's basketball at the Olympics?",
       buscarResposta: atletas => (alternativas = undefined) => {
         const ouroFeminino = [...atletas.filter(atleta => atleta.medal == "Gold" && atleta.sex == "F")
           .reduce((acc, atleta) => {
@@ -163,7 +161,6 @@ const recebeListaAtletas = (csvCleaned) => {
             return acc;
           }, [])]
           .map(x => [x.team, x.year]);
-        // resposta é a União Soviética em 1976
         const corte = alternativas != undefined ? alternativas : ouroFeminino.length + 1;
         const resposta = [...ouroFeminino.slice(0, corte).map(x => x[0])];
         return resposta;
@@ -245,9 +242,9 @@ const selecionaAlternativa = () => {
         questionContainer.style.display = "none";
         feedbackContainer.style.display = "block";
         scoreContainer.style.display = "block";
-        scoreCorrect.textContent = `Respostas corretas: ${readCorrectAnswers()}`;
-        scoreIncorrect.textContent = `Respostas incorretas: ${readIncorrectAnswers()}`;
-        feedbackContainer.textContent = readCorrectAnswers() == perguntas.length ? "Parabéns, você acertou todas as perguntas!" : "Você errou algumas perguntas, tente novamente!";
+        scoreCorrect.textContent = `Correct answers: ${readCorrectAnswers()}`;
+        scoreIncorrect.textContent = `Incorrect answers ${readIncorrectAnswers()}`;
+        feedbackContainer.textContent = readCorrectAnswers() == perguntas.length ? "Congratulations, you got all the questions right!" : "";
       }
 
   }
