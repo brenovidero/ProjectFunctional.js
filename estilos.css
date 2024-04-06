@@ -1,29 +1,27 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: rgb(32, 35, 37);
+  background-color: #f0f0f0;
   margin: 0;
   padding: 0;
 }
 
-#quizSobreBasquete {
-  color: white;
+#quizSobreBasquete{
   text-align: center;
-  background-color: #1e913d;
+  background-color: #52e579;
   width: 40%;
   translate: 75%;
   border-radius: 15px;
 }
 
-#question-text {
-  color: white;
+#question-text{
   text-align: center;
   border-bottom: 2px solid #8e8e8e;
 }
 
 #question-container {
-  background-color: rgb(24, 26, 27);
+  background-color: #fff;
   border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
   margin: 20px auto;
   max-width: 600px;
@@ -69,8 +67,7 @@ body {
   background-color: #388e3c;
 }
 
-#feedback-container,
-#score-container {
+#feedback-container, #score-container {
   text-align: center;
   margin: 20px auto;
 }
@@ -104,10 +101,18 @@ body {
   background-color: #d32f2f;
 }
 
-#q-quiz {
+#q-quiz{
   justify-content: center;
   align-items: center;
   margin-bottom: -50px;
   margin-right: -7px;
   width: 90px;
+}
+
+#answer-form label.selected.correct, .correct {
+  background-color: #388e3c;
+}
+
+#answer-form label.selected.wrong {
+  background-color: #d32f2f;
 }
