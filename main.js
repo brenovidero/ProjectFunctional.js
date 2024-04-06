@@ -91,13 +91,15 @@ const recebeListaAtletas = (csvCleaned) => {
     {
       pergunta: "Which country has won the most gold medals in men's basketball until 2014?",
       buscarResposta: (atletas) => (alternativas = undefined) => {
-        const medalhasOuroPorPais = atletas.filter(atleta => atleta.medal == "Gold" && atleta.sex == "M" && atleta.year < 2014).reduce((contador, atleta) => {
+        const medalhasOuroPorPais = atletas.filter(atleta => atleta.medal == "Gold" && atleta.sex == "M" && atleta.year <= 2014)
+                                            .reduce((contador, atleta) => {
           contador[atleta.team] = (contador[atleta.team] || 0) + 1;
           return contador;
         }, {});
-        const corte = alternativas !== undefined ? alternativas : Object.keys(medalhasOuroPorPais).length
-        const paisComMaisOuro = Object.keys(medalhasOuroPorPais).slice(0, corte);
-        return paisComMaisOuro;
+        const aleatorioOrdena = () => Math.random() - 0.5;
+        const corte = alternativas !== undefined ? alternativas : Object.keys(medalhasOuroPorPais).length + 1;
+        const paisComMaisOuro = [...Object.keys(medalhasOuroPorPais), 'Spain'].slice(0, corte);
+        return [...paisComMaisOuro].sort(aleatorioOrdena);
       },
       pontos: 1
     },
@@ -113,9 +115,10 @@ const recebeListaAtletas = (csvCleaned) => {
             return acc;
           }, []).length;
           const outrasAlternativas = [9, 10, 13, 16]
+          const aleatorioOrdena = () => Math.random() - 0.5;
           const corte = alternativas != undefined ? alternativas : outrasAlternativas.length + 1;
           const resposta = [...[ouroEUA, ...outrasAlternativas].slice(0, corte).sort((a, b) => a - b)];
-          return resposta;
+          return [...resposta].sort(aleatorioOrdena);
         },
       pontos: 1
     },
@@ -133,8 +136,9 @@ const recebeListaAtletas = (csvCleaned) => {
         const qtdPaisesComOuro = paisesComOuro.length;
         const corte = alternativas != undefined ? alternativas : paisesComOuro.length + 2;
         const outrasAlternativas = [1, 2, 5, 8];
+        const aleatorioOrdena = () => Math.random() - 0.5;
         const resposta = [...[qtdPaisesComOuro, ...outrasAlternativas]].slice(0, corte).sort((a, b) => a - b);
-        return resposta;
+        return [...resposta].sort(aleatorioOrdena);
       },
       pontos: 1
     },
@@ -143,16 +147,17 @@ const recebeListaAtletas = (csvCleaned) => {
       buscarResposta: atletas => (alternativas = undefined) => {
         const medalhasIugoslavia = atletas.filter(atleta => atleta.team == "Yugoslavia" && atleta.sex == "M" && atleta.year <= 2016 && atleta.medal != "NA").length
         const outrasAlternativas = [70, 50, 77, 55];
+        const aleatorioOrdena = () => Math.random() - 0.5;
         const corte = alternativas != undefined ? alternativas : outrasAlternativas.length + 1;
         const resposta = [...[medalhasIugoslavia, ...outrasAlternativas].slice(0, corte).sort((a, b) => a - b)];
-        return resposta;
+        return [...resposta].sort(aleatorioOrdena);
       },
       pontos: 1
     },
     {
       pergunta: "Which country was the first to win a gold medal in women's basketball at the Olympics?",
       buscarResposta: atletas => (alternativas = undefined) => {
-        const ouroFeminino = [...atletas.filter(atleta => atleta.medal == "Gold" && atleta.sex == "F")
+        const ouroFeminino = [...atletas.filter(atleta => (atleta.medal == "Gold" || atleta.medal == 'Silver') && atleta.sex == "F")
           .reduce((acc, atleta) => {
             index = acc.findIndex(x => x.team == atleta.team);
             if (index == -1) {
@@ -160,10 +165,11 @@ const recebeListaAtletas = (csvCleaned) => {
             }
             return acc;
           }, [])]
-          .map(x => [x.team, x.year]);
-        const corte = alternativas != undefined ? alternativas : ouroFeminino.length + 1;
-        const resposta = [...ouroFeminino.slice(0, corte).map(x => x[0])];
-        return resposta;
+          .map(x => [x.team, x.year]).sort((atletaA, atletaB) => atletaA[1] - atletaB[1]);
+          const aleatorioOrdena = () => Math.random() - 0.5;
+          const corte = alternativas != undefined ? alternativas : 5;
+          const resposta = [...ouroFeminino.slice(0, corte).map(x => x[0])];
+          return [...resposta].sort(aleatorioOrdena);
       },
       pontos: 1
     }
