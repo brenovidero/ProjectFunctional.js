@@ -184,9 +184,9 @@ const selecionaAlternativa = () => {
   const respostaCorreta = perguntas[readCurrentQuestionIdx()].buscarResposta(csvCleaned)(1)[0];
   const answerLabels = [...document.querySelectorAll('#answer-form label')];
 
-  answerLabels.forEach(label => {
+  [...answerLabels].map(label => {
     label.addEventListener('click', () => {
-      answerLabels.forEach(label => {
+      [...answerLabels].map(label => {
         label.classList.remove('selected');
         label.classList.remove('correct');
         label.classList.remove('wrong');
@@ -204,7 +204,7 @@ const selecionaAlternativa = () => {
       }
 
       nextQuestionBtn.style.display = "block";
-      answerLabels.forEach(label => {
+      [...answerLabels].map(label => {
         label.style.pointerEvents = "none"; // Disable pointer events on all labels
       });
     });
