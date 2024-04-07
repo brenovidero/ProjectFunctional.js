@@ -66,15 +66,17 @@ const processarCSV = () => {
           ),
       ].slice(1)[0]; // Remove a primeira linha, que é o cabeçalho
       recebeListaAtletas(csvLimpo);
+      console.log(csvLimpo)// Visualizar o csv processado pelo terminal do navegador
       //primeiraQuestão(csvCleaned); // Chama a função para manipular os dados do arquivo CSV;
     })
     .catch(error => { // O método catch é chamado quando a Promise é rejeitada, e retorna um erro
       console.error('Ocorreu um erro ao processar o arquivo CSV:', error);
     });
+    
+
 }
 // Chamar a função para processar o arquivo CSV quando a página for carregada
 processarCSV(); // Chama a função para processar o arquivo CSV
-
 
 // -- [Funções puras] -------------------------
 
@@ -92,10 +94,10 @@ const recebeListaAtletas = (csvCleaned) => {
       pergunta: "Which country has won the most gold medals in men's basketball until 2014?",
       buscarResposta: (atletas) => (alternativas = undefined) => {
         const medalhasOuroPorPais = atletas.filter(atleta => atleta.medal == "Gold" && atleta.sex == "M" && atleta.year <= 2014)
-                                            .reduce((contador, atleta) => {
-          contador[atleta.team] = (contador[atleta.team] || 0) + 1;
-          return contador;
-        }, {});
+          .reduce((contador, atleta) => {
+            contador[atleta.team] = (contador[atleta.team] || 0) + 1;
+            return contador;
+          }, {});
         const aleatorioOrdena = () => Math.random() - 0.5;
         const corte = alternativas !== undefined ? alternativas : Object.keys(medalhasOuroPorPais).length + 1;
         const paisComMaisOuro = [...Object.keys(medalhasOuroPorPais), 'Spain'].slice(0, corte);
@@ -114,12 +116,12 @@ const recebeListaAtletas = (csvCleaned) => {
             }
             return acc;
           }, []).length;
-          const outrasAlternativas = [9, 10, 13, 16]
-          const aleatorioOrdena = () => Math.random() - 0.5;
-          const corte = alternativas != undefined ? alternativas : outrasAlternativas.length + 1;
-          const resposta = [...[ouroEUA, ...outrasAlternativas].slice(0, corte).sort((a, b) => a - b)];
-          return [...resposta].sort(aleatorioOrdena);
-        },
+        const outrasAlternativas = [9, 10, 13, 16]
+        const aleatorioOrdena = () => Math.random() - 0.5;
+        const corte = alternativas != undefined ? alternativas : outrasAlternativas.length + 1;
+        const resposta = [...[ouroEUA, ...outrasAlternativas].slice(0, corte).sort((a, b) => a - b)];
+        return [...resposta].sort(aleatorioOrdena);
+      },
       pontos: 1
     },
     {
@@ -166,50 +168,50 @@ const recebeListaAtletas = (csvCleaned) => {
             return acc;
           }, [])]
           .map(x => [x.team, x.year]).sort((atletaA, atletaB) => atletaA[1] - atletaB[1]);
-          const aleatorioOrdena = () => Math.random() - 0.5;
-          const corte = alternativas != undefined ? alternativas : 5;
-          const resposta = [...ouroFeminino.slice(0, corte).map(x => x[0])];
-          return [...resposta].sort(aleatorioOrdena);
+        const aleatorioOrdena = () => Math.random() - 0.5;
+        const corte = alternativas != undefined ? alternativas : 5;
+        const resposta = [...ouroFeminino.slice(0, corte).map(x => x[0])];
+        return [...resposta].sort(aleatorioOrdena);
       },
       pontos: 1
     }
   ];
 
-const useState = (initialState) => {
-  const read = () => initialState
-  const write = f => initialState = typeof f === 'function' ? f(initialState): f
-  return [read, write]
-}
-const selecionaAlternativa = () => {
-  const respostaCorreta = perguntas[readCurrentQuestionIdx()].buscarResposta(csvCleaned)(1)[0];
-  const answerLabels = [...document.querySelectorAll('#answer-form label')];
+  const useState = (initialState) => {
+    const read = () => initialState
+    const write = f => initialState = typeof f === 'function' ? f(initialState) : f
+    return [read, write]
+  }
+  const selecionaAlternativa = () => {
+    const respostaCorreta = perguntas[readCurrentQuestionIdx()].buscarResposta(csvCleaned)(1)[0];
+    const answerLabels = [...document.querySelectorAll('#answer-form label')];
 
-  [...answerLabels].map(label => {
-    label.addEventListener('click', () => {
-      [...answerLabels].map(label => {
-        label.classList.remove('selected');
-        label.classList.remove('correct');
-        label.classList.remove('wrong');
-        label.removeEventListener('click', () => {}); // Remove the click event listener
-      });
+    [...answerLabels].map(label => {
+      label.addEventListener('click', () => {
+        [...answerLabels].map(label => {
+          label.classList.remove('selected');
+          label.classList.remove('correct');
+          label.classList.remove('wrong');
+          label.removeEventListener('click', () => { }); // Remove the click event listener
+        });
 
-      label.classList.add('selected');
-      if (label.children[0].value == respostaCorreta) {
-        label.classList.add('correct');
-      } else {
-        label.classList.add('wrong');
-        // Find the correct label and add the 'correct' class
-        const correctLabel = answerLabels.find(l => l.children[0].value == respostaCorreta);
-        correctLabel.classList.add('correct');
-      }
+        label.classList.add('selected');
+        if (label.children[0].value == respostaCorreta) {
+          label.classList.add('correct');
+        } else {
+          label.classList.add('wrong');
+          // Find the correct label and add the 'correct' class
+          const correctLabel = answerLabels.find(l => l.children[0].value == respostaCorreta);
+          correctLabel.classList.add('correct');
+        }
 
-      nextQuestionBtn.style.display = "block";
-      [...answerLabels].map(label => {
-        label.style.pointerEvents = "none"; // Disable pointer events on all labels
+        nextQuestionBtn.style.display = "block";
+        [...answerLabels].map(label => {
+          label.style.pointerEvents = "none"; // Disable pointer events on all labels
+        });
       });
     });
-  });
-}
+  }
 
   // Função para buscar a resposta correta para uma pergunta
   const buscarRespostaCorreta = (atletas, pergunta) => pergunta.buscarResposta(atletas)(1);
@@ -231,27 +233,27 @@ const selecionaAlternativa = () => {
 
   const mostrarProximaPergunta = () => {
     const respostaUsuario = document.querySelector("input[name='answer']:checked");
-    	const currentQuestionIndex = readCurrentQuestionIdx()
-      const resposta = respostaUsuario.value;
-      const perguntaAtual = perguntas[currentQuestionIndex];
-      const respostaCorreta = buscarRespostaCorreta(csvCleaned, perguntaAtual);
+    const currentQuestionIndex = readCurrentQuestionIdx()
+    const resposta = respostaUsuario.value;
+    const perguntaAtual = perguntas[currentQuestionIndex];
+    const respostaCorreta = buscarRespostaCorreta(csvCleaned, perguntaAtual);
 
-      if (resposta == respostaCorreta) {
-        writeCurrentAnswers(x => x + 1);
-      } else {
-        writeIncorrectAnswers(x => x + 1)
-      } // ate aq
-        writeCurrentQuestionIdx(x => x + 1);
-      if (readCurrentQuestionIdx() < perguntas.length) {
-        exibirPergunta(perguntas[readCurrentQuestionIdx()], csvCleaned);
-      } else {
-        questionContainer.style.display = "none";
-        feedbackContainer.style.display = "block";
-        scoreContainer.style.display = "block";
-        scoreCorrect.textContent = `Correct answers: ${readCorrectAnswers()}`;
-        scoreIncorrect.textContent = `Incorrect answers ${readIncorrectAnswers()}`;
-        feedbackContainer.textContent = readCorrectAnswers() == perguntas.length ? "Congratulations, you got all the questions right!" : "";
-      }
+    if (resposta == respostaCorreta) {
+      writeCurrentAnswers(x => x + 1);
+    } else {
+      writeIncorrectAnswers(x => x + 1)
+    } // ate aq
+    writeCurrentQuestionIdx(x => x + 1);
+    if (readCurrentQuestionIdx() < perguntas.length) {
+      exibirPergunta(perguntas[readCurrentQuestionIdx()], csvCleaned);
+    } else {
+      questionContainer.style.display = "none";
+      feedbackContainer.style.display = "block";
+      scoreContainer.style.display = "block";
+      scoreCorrect.textContent = `Correct answers: ${readCorrectAnswers()}`;
+      scoreIncorrect.textContent = `Incorrect answers ${readIncorrectAnswers()}`;
+      feedbackContainer.textContent = readCorrectAnswers() == perguntas.length ? "Congratulations, you got all the questions right!" : "";
+    }
 
   }
 
