@@ -33,20 +33,20 @@ const processarCSV = () => {
             // apenas pega a ',' que é seguida por um caractere alfanumérico
             .split(/(?:,"|",(?=\w))/gi)
             // Para cada campo, ajusta-o conforme necessário
-            .flatMap((elemento, indice) => (indice === 3 ? elemento.split(",") : elemento.replace(/["]/g, ""))) // O flatMap vai transformar um array de arrays em um array simples
+            .flatMap((elemento, indice) => (indice == 3 ? elemento.split(",") : elemento.replace(/["]/g, ""))) // O flatMap vai transformar um array de arrays em um array simples
 
             // Reduz o array de campos para um objeto, utilizando o cabeçalho como chaves
             .reduce(
               (acumulador, elemento, indice) => {
                 // Remove o caractere '\r\n' do atributo 'id'
-                if (cabecalhoFormatado[indice] === 'id') {
+                if (cabecalhoFormatado[indice] == 'id') {
                   return {
                     ...acumulador,
                     [cabecalhoFormatado[indice]]: parseInt(elemento.replace(/\r\n/g, '')), // Remove o caractere '\r\n' do atributo 'id'
                   };
                 }
                 // Converte os atributos 'idade', 'altura', 'peso' e 'ano' para números inteiros
-                if (cabecalhoFormatado[indice] === 'age' || cabecalhoFormatado[indice] === 'height' || cabecalhoFormatado[indice] === 'year' || cabecalhoFormatado[indice] === 'id') {
+                if (cabecalhoFormatado[indice] == 'age' || cabecalhoFormatado[indice] == 'height' || cabecalhoFormatado[indice] == 'year' || cabecalhoFormatado[indice] == 'id') {
                   return {
                     ...acumulador,
                     [cabecalhoFormatado[indice]]: parseInt(elemento),
@@ -66,7 +66,6 @@ const processarCSV = () => {
           ),
       ].slice(1)[0]; // Remove a primeira linha, que é o cabeçalho
       recebeListaAtletas(csvLimpo);
-      console.log(csvLimpo)// Visualizar o csv processado pelo terminal do navegador
       //primeiraQuestão(csvCleaned); // Chama a função para manipular os dados do arquivo CSV;
     })
     .catch(error => { // O método catch é chamado quando a Promise é rejeitada, e retorna um erro
@@ -182,8 +181,15 @@ const recebeListaAtletas = (csvCleaned) => {
       // Função para buscar a resposta, que recebe os atletas como parâmetro e retorna outra função opcionalmente recebendo alternativas
       buscarResposta: atletas => (alternativas = undefined) => {
           // Filtra os atletas relevantes com base nas condições fornecidas
-          const medalhasUniaoSovietica = atletas.filter(atleta => atleta.team === "Soviet Union" && atleta.sex === "M" && atleta.year < 1992 && atleta.medal !== "NA").length;
-  
+          const medalhasUniaoSovietica = atletas.filter(atleta => atleta.team == "Soviet Union" && atleta.sex == "M" && atleta.year <= 1992 && atleta.medal !== "NA")
+                                                .reduce((acc, atleta)=> {
+                                                  index = acc.findIndex(x => x.year == atleta.year);
+                                                  if(index == -1){ // Se o ano não estiver presente no array, adiciona o atleta
+                                                    acc = [...acc, atleta];
+                                                  }
+                                                  return acc;
+                                                },[]).length;
+            // resposta 9 vezes 
           // Outras opções de resposta
           const outrasAlternativas = [6, 8, 10, 12];
   
@@ -208,7 +214,7 @@ const recebeListaAtletas = (csvCleaned) => {
 // A função retorna um array contendo o valor inicial e o final
   const useState = (estadoinicial) => {
     const ler = () => estadoinicial
-    const escrever = f => estadoinicial = typeof f === 'function' ? f(estadoinicial) : f
+    const escrever = f => estadoinicial = typeof f == 'function' ? f(estadoinicial) : f
     return [ler, escrever]
   }
   const selecionaAlternativa = () => {
