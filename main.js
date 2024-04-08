@@ -174,13 +174,26 @@ const recebeListaAtletas = (csvCleaned) => {
         return [...resposta].sort(aleatorioOrdena);
       },
       pontos: 1
-    }
+    },
+    {
+      pergunta: "Quantas vezes a equipe de basquete masculino da União Soviética ganhou medalha de ouro até 1992?",
+      buscarResposta: atletas => (alternativas = undefined) => {
+          const medalhasUniaoSovietica = atletas.filter(atleta => atleta.team === "Soviet Union" && atleta.sex === "M" && atleta.year < 1992 && atleta.medal !== "NA").length;
+          const outrasAlternativas = [6, 8, 10, 12]; // Outras opções de resposta
+          const aleatorioOrdena = () => Math.random() - 0.5;
+          const corte = alternativas !== undefined ? alternativas : outrasAlternativas.length + 1;
+          const resposta = [...[medalhasUniaoSovietica, ...outrasAlternativas].slice(0, corte).sort((a, b) => a - b)];
+          return [...resposta].sort(aleatorioOrdena);
+      },
+      pontos: 1
+  }
   ];
-
-  const useState = (initialState) => {
-    const read = () => initialState
-    const write = f => initialState = typeof f === 'function' ? f(initialState) : f
-    return [read, write]
+// Função utilizada para controlar estados de eventos, usada para atualizar indices em outras partes do código, sem o uso de váriaveis.
+// A função retorna um array contendo o valor inicial e o final
+  const useState = (estadoinicial) => {
+    const ler = () => estadoinicial
+    const escrever = f => estadoinicial = typeof f === 'function' ? f(estadoinicial) : f
+    return [ler, escrever]
   }
   const selecionaAlternativa = () => {
     const respostaCorreta = perguntas[readCurrentQuestionIdx()].buscarResposta(csvCleaned)(1)[0];
@@ -216,11 +229,12 @@ const recebeListaAtletas = (csvCleaned) => {
   // Função para buscar a resposta correta para uma pergunta
   const buscarRespostaCorreta = (atletas, pergunta) => pergunta.buscarResposta(atletas)(1);
 
+  // Definição de constantes parar capturar os elementos
   const questionContainer = document.getElementById("question-container");
   const feedbackContainer = document.getElementById("feedback-container");
   const scoreContainer = document.getElementById("score-container");
   const questionText = document.getElementById("question-text");
-  const answerForm = document.getElementById("answer-form");
+  const answerForm = document.getElementById("answer-form");      
   const feedbackText = document.getElementById("feedback-text"); //???
   const nextQuestionBtn = document.getElementById("next-question-btn");
   const scoreCorrect = document.getElementById("score-correct"); //???
