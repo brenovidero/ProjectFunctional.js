@@ -29,7 +29,6 @@ const processarCSV = () => {
             // Divide a linha em array de campos, utilizando a expressão regular
             // /(?:,"|",(?=\w))/gi
             // Isso significa que o separador é ','
-            // mas o match não consome o ','
             // apenas pega a ',' que é seguida por um caractere alfanumérico
             .split(/(?:,"|",(?=\w))/gi)
             // Para cada campo, ajusta-o conforme necessário
@@ -66,7 +65,6 @@ const processarCSV = () => {
           ),
       ].slice(1)[0]; // Remove a primeira linha, que é o cabeçalho
       recebeListaAtletas(csvLimpo);
-      //primeiraQuestão(csvCleaned); // Chama a função para manipular os dados do arquivo CSV;
     })
     .catch(error => { // O método catch é chamado quando a Promise é rejeitada, e retorna um erro
       console.error('Ocorreu um erro ao processar o arquivo CSV:', error);
@@ -77,16 +75,8 @@ const processarCSV = () => {
 // Chamar a função para processar o arquivo CSV quando a página for carregada
 processarCSV(); // Chama a função para processar o arquivo CSV
 
-// -- [Funções puras] -------------------------
-
-//Primeira Questão
-// const primeiraQuestão = (maiorNumeroDeMedalhaDeOuro) => maiorNumeroDeMedalhaDeOuro
-//   .filter(x => x.medel == "Gold" && x.Sport == "Basketball")
-//   .map(x => x.)
-
-// Declaração de variáveis
-// Array de perguntas com as funções de alta ordem para buscar a resposta correta
-const recebeListaAtletas = (csvCleaned) => {
+// Função que recebe a lista de atletas e executa o quiz
+const recebeListaAtletas = (registroAtletas) => {
 
   const perguntas = [
     {
@@ -94,13 +84,13 @@ const recebeListaAtletas = (csvCleaned) => {
       buscarResposta: (atletas) => (alternativas = undefined) => {
         const medalhasOuroPorPais = atletas.filter(atleta => atleta.medal == "Gold" && atleta.sex == "M" && atleta.year <= 2014)
           .reduce((contador, atleta) => {
-            contador[atleta.team] = (contador[atleta.team] || 0) + 1;
+            contador[atleta.team] = (contador[atleta.team] || 0) + 1; // Incrementa o contador de medalhas de ouro para o país
             return contador;
           }, {});
         const aleatorioOrdena = () => Math.random() - 0.5;
-        const corte = alternativas !== undefined ? alternativas : Object.keys(medalhasOuroPorPais).length + 1;
-        const paisComMaisOuro = [...Object.keys(medalhasOuroPorPais), 'Spain'].slice(0, corte);
-        return [...paisComMaisOuro].sort(aleatorioOrdena);
+        const corte = alternativas !== undefined ? alternativas : Object.keys(medalhasOuroPorPais).length + 1; // Determina o número de alternativas a serem retornadas
+        const paisComMaisOuro = [...Object.keys(medalhasOuroPorPais), 'Spain'].slice(0, corte); // Faz uma cópia do array de países com medalhas de ouro e depois faz o corte do array de acordo com o número de alternativas ou a resposta corrta
+        return [...paisComMaisOuro].sort(aleatorioOrdena); //Retorna a resposta com as alternativas ordenadas aleatoriamente
       },
       pontos: 1
     },
@@ -110,7 +100,7 @@ const recebeListaAtletas = (csvCleaned) => {
         const ouroEUA = atletas.filter(atleta => atleta.medal == "Gold" && atleta.team == "United States" && atleta.sex == "M" && atleta.year < 2016)
           .reduce((acc, atletas) => {
             index = acc.findIndex(x => x.year == atletas.year);
-            if (index == -1) {
+            if (index == -1) {// Se o ano não estiver presente no array, adiciona o atleta
               acc = [...acc, atletas];
             }
             return acc;
@@ -129,7 +119,7 @@ const recebeListaAtletas = (csvCleaned) => {
         const paisesComOuro = atletas.filter(atleta => atleta.medal == "Gold" && atleta.sex == "M" && atleta.year <= 1980)
           .reduce((acc, atleta) => {
             index = acc.findIndex(x => x.team == atleta.team);
-            if (index == -1) {
+            if (index == -1) { // Se o país não estiver presente no array, adiciona o atleta
               acc = [...acc, atleta];
             }
             return acc;
@@ -161,7 +151,7 @@ const recebeListaAtletas = (csvCleaned) => {
         const ouroFeminino = [...atletas.filter(atleta => (atleta.medal == "Gold" || atleta.medal == 'Silver') && atleta.sex == "F")
           .reduce((acc, atleta) => {
             index = acc.findIndex(x => x.team == atleta.team);
-            if (index == -1) {
+            if (index == -1) {// Se o país não estiver presente no array, adiciona o atleta
               acc = [...acc, atleta];
             }
             return acc;
@@ -212,22 +202,22 @@ const recebeListaAtletas = (csvCleaned) => {
   ];
 // Função utilizada para controlar estados de eventos, usada para atualizar indices em outras partes do código, sem o uso de váriaveis.
 // A função retorna um array contendo o valor inicial e o final
-  const useState = (estadoinicial) => {
+  const definirEstado = (estadoinicial) => {
     const ler = () => estadoinicial
     const escrever = f => estadoinicial = typeof f == 'function' ? f(estadoinicial) : f
     return [ler, escrever]
   }
   const selecionaAlternativa = () => {
-    const respostaCorreta = perguntas[readCurrentQuestionIdx()].buscarResposta(csvCleaned)(1)[0];
-    const answerLabels = [...document.querySelectorAll('#answer-form label')];
+    const respostaCorreta = perguntas[IndexLeituraAtualQuestao()].buscarResposta(registroAtletas)(1)[0];
+    const alternativasLabels = [...document.querySelectorAll('#answer-form label')];
 
-    [...answerLabels].map(label => {
+    [...alternativasLabels].map(label => {
       label.addEventListener('click', () => {
-        [...answerLabels].map(label => {
+        [...alternativasLabels].map(label => {
           label.classList.remove('selected');
           label.classList.remove('correct');
           label.classList.remove('wrong');
-          label.removeEventListener('click', () => { }); // Remove the click event listener
+          label.removeEventListener('click', () => { });// Remove o ouvinte de eventos de clique
         });
 
         label.classList.add('selected');
@@ -235,14 +225,14 @@ const recebeListaAtletas = (csvCleaned) => {
           label.classList.add('correct');
         } else {
           label.classList.add('wrong');
-          // Find the correct label and add the 'correct' class
-          const correctLabel = answerLabels.find(l => l.children[0].value == respostaCorreta);
-          correctLabel.classList.add('correct');
+         // Encontra o label correto e adiciona a classe 'correct'
+          const labelCorreto = alternativasLabels.find(label => label.children[0].value == respostaCorreta);
+          labelCorreto.classList.add('correct');
         }
 
-        nextQuestionBtn.style.display = "block";
-        [...answerLabels].map(label => {
-          label.style.pointerEvents = "none"; // Disable pointer events on all labels
+        botaoProximaQuestao.style.display = "block";
+        [...alternativasLabels].map(label => {
+          label.style.pointerEvents = "none";// Desabilita eventos de ponteiro em todos os labels
         });
       });
     });
@@ -252,63 +242,66 @@ const recebeListaAtletas = (csvCleaned) => {
   const buscarRespostaCorreta = (atletas, pergunta) => pergunta.buscarResposta(atletas)(1);
 
   // Definição de constantes parar capturar os elementos
-  const questionContainer = document.getElementById("question-container");
+  const contemQuestoes = document.getElementById("question-container");
   const feedbackContainer = document.getElementById("feedback-container");
-  const scoreContainer = document.getElementById("score-container");
-  const questionText = document.getElementById("question-text");
-  const answerForm = document.getElementById("answer-form");      
-  const feedbackText = document.getElementById("feedback-text"); //???
-  const nextQuestionBtn = document.getElementById("next-question-btn");
-  const scoreCorrect = document.getElementById("score-correct"); //???
-  const scoreIncorrect = document.getElementById("score-incorrect");//???
-  const restartQuizbtn = document.getElementById("restart-quiz-btn")
+  const contemPontuacao = document.getElementById("score-container");
+  const textoDaQuestao = document.getElementById("question-text");
+  const respostaFormulario = document.getElementById("answer-form");      
+  const feedbackText = document.getElementById("feedback-text");
+  const botaoProximaQuestao = document.getElementById("next-question-btn");
+  const pontuacaoRespCorretas = document.getElementById("score-correct");
+  const pontuacaoRespIncorretas = document.getElementById("score-incorrect");
+  const botaoReiniciarQuiz = document.getElementById("restart-quiz-btn")
 
-  const [readCurrentQuestionIdx, writeCurrentQuestionIdx] = useState(0)
-  const [readCorrectAnswers, writeCurrentAnswers] = useState(0)
-  const [readIncorrectAnswers, writeIncorrectAnswers] = useState(0)
+  // Definição de estados para controlar o índice da pergunta atual e o número de respostas corretas e incorretas
+  const [IndexLeituraAtualQuestao, IndexEscritaAtualQuestao] = definirEstado(0)
+  const [lerRespostasCorretas, escreverRespostasCorretas] = definirEstado(0)
+  const [lerRespostasIncorretas, escreverRespostasIncorretas] = definirEstado(0)
 
   const mostrarProximaPergunta = () => {
     const respostaUsuario = document.querySelector("input[name='answer']:checked");
-    const currentQuestionIndex = readCurrentQuestionIdx()
+    const currentQuestionIndex = IndexLeituraAtualQuestao()
     const resposta = respostaUsuario.value;
     const perguntaAtual = perguntas[currentQuestionIndex];
-    const respostaCorreta = buscarRespostaCorreta(csvCleaned, perguntaAtual);
+    const respostaCorreta = buscarRespostaCorreta(registroAtletas, perguntaAtual);
 
     if (resposta == respostaCorreta) {
-      writeCurrentAnswers(x => x + 1);
+      escreverRespostasCorretas(x => x + 1);
     } else {
-      writeIncorrectAnswers(x => x + 1)
-    } // ate aq
-    writeCurrentQuestionIdx(x => x + 1);
-    if (readCurrentQuestionIdx() < perguntas.length) {
-      exibirPergunta(perguntas[readCurrentQuestionIdx()], csvCleaned);
+      escreverRespostasIncorretas(x => x + 1)
+    }
+    IndexEscritaAtualQuestao(x => x + 1);
+    if (IndexLeituraAtualQuestao() < perguntas.length) {
+      exibirPergunta(perguntas[IndexLeituraAtualQuestao()], registroAtletas);
     } else {
-      questionContainer.style.display = "none";
+      contemQuestoes.style.display = "none";
       feedbackContainer.style.display = "block";
-      scoreContainer.style.display = "block";
-      scoreCorrect.textContent = `Correct answers: ${readCorrectAnswers()}`;
-      scoreIncorrect.textContent = `Incorrect answers ${readIncorrectAnswers()}`;
-      feedbackContainer.textContent = readCorrectAnswers() == perguntas.length ? "Congratulations, you got all the questions right!" : "";
+      contemPontuacao.style.display = "block";
+      pontuacaoRespCorretas.textContent = `Correct answers: ${lerRespostasCorretas()}`;
+      pontuacaoRespIncorretas.textContent = `Incorrect answers ${lerRespostasIncorretas()}`;
+      feedbackContainer.textContent = lerRespostasCorretas() == perguntas.length ? "Congratulations, you got all the questions right!" : "";
     }
 
   }
 
   const reiniciarQuiz = () => {
-    writeCurrentQuestionIdx(0)
-    writeCurrentAnswers(0)
-    writeIncorrectAnswers(0)
-    exibirPergunta(perguntas[0], csvCleaned);
-    scoreContainer.style.display = "none";
+    // Reseta os estados para os valores iniciais
+    IndexEscritaAtualQuestao(0)
+    escreverRespostasCorretas(0)
+    escreverRespostasIncorretas(0)
+    // Exibe a primeira pergunta
+    exibirPergunta(perguntas[0], registroAtletas);
+    contemPontuacao.style.display = "none";
     feedbackContainer.style.display = "none";
-    questionContainer.style.display = "block";
+    contemQuestoes.style.display = "block";
   };
-  restartQuizbtn.addEventListener("click", reiniciarQuiz)
+  botaoReiniciarQuiz.addEventListener("click", reiniciarQuiz)
 
   const exibirPergunta = (pergunta, processCSV) => {
-    questionText.textContent = pergunta.pergunta;
-    answerForm.innerHTML = "";
+    textoDaQuestao.textContent = pergunta.pergunta;
+    respostaFormulario.innerHTML = "";
     const respostasPossiveis = [...(pergunta.buscarResposta(processCSV)())];
-    respostasPossiveis.map(resposta => {
+    respostasPossiveis.map(resposta => { // Mapeia as respostas possíveis e cria um input radio para cada uma
       const input = document.createElement("input");
       input.type = "radio";
       input.name = "answer";
@@ -316,17 +309,16 @@ const recebeListaAtletas = (csvCleaned) => {
       const label = document.createElement("label");
       label.textContent = resposta;
       label.appendChild(input);
-      answerForm.appendChild(label);
-      answerForm.appendChild(document.createElement("br"));
+      respostaFormulario.appendChild(label);
+      respostaFormulario.appendChild(document.createElement("br"));
     });
     selecionaAlternativa();
     feedbackText.textContent = "";
-    nextQuestionBtn.style.display = "none";
+    botaoProximaQuestao.style.display = "none";
   }
 
-
-  exibirPergunta(perguntas[readCurrentQuestionIdx()], csvCleaned);
-  nextQuestionBtn.addEventListener("click", mostrarProximaPergunta);
+  exibirPergunta(perguntas[IndexLeituraAtualQuestao()], registroAtletas);
+  botaoProximaQuestao.addEventListener("click", mostrarProximaPergunta);
 
 
 }
