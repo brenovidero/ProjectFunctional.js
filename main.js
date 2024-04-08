@@ -228,7 +228,31 @@ const recebeListaAtletas = (registroAtletas) => {
       return [...resposta].sort(aleatorioOrdena);
   },
   pontos: 1
+},
+{
+  pergunta: "Quantas medalhas de ouro foram concedidas aos atletas do Canadá no basquete masculino até 2012?",
+  buscarResposta: (atletas) => (alternativas = undefined) => {
+      const ouroCanadaMasculino = atletas.filter(atleta => atleta.medal == "Gold" && atleta.team == "Canada" && atleta.sex == "M" && atleta.year <= 2012).length;
+      const outrasAlternativas = [0, 1, 2, 3];
+      const aleatorioOrdena = () => Math.random() - 0.5;
+      const corte = alternativas !== undefined ? alternativas : outrasAlternativas.length + 1;
+      const resposta = [...[ouroCanadaMasculino, ...outrasAlternativas].slice(0, corte)];
+      return [...resposta].sort(aleatorioOrdena);
+  },
+  pontos: 1
+},
+{
+  pergunta: "Em que ano a modalidade de basquete foi introduzida pela primeira vez nas Olimpíadas?",
+  buscarResposta: (atletas) => (alternativas = undefined) => {
+      const primeiroAnoBasquete = atletas.filter(atleta => atleta.sport == "Basketball").map(atleta => atleta.year).sort()[0];
+      const aleatorioOrdena = () => Math.random() - 0.5;
+      const corte = alternativas !== undefined ? alternativas : 5;
+      const resposta = [primeiroAnoBasquete, 1900, 1920, 1936, 1948].slice(0, corte);
+      return [...resposta].sort(aleatorioOrdena);
+  },
+  pontos: 1
 }
+
 
   ];
 // Função utilizada para controlar estados de eventos, usada para atualizar indices em outras partes do código, sem o uso de váriaveis.
