@@ -200,7 +200,7 @@ const recebeListaAtletas = (registroAtletas) => {
       pontos: 1
   },
   {
-    pergunta: "Quantas vezes o Brasil ganhou medalhas de ouro no basquete feminino até 2008?",
+    pergunta: "How many times did Brazil win gold medals in women's basketball until 2008?",
     buscarResposta: (atletas) => (alternativas = undefined) => {
         const ouroBrasilFeminino = atletas.filter(atleta => atleta.medal == "Gold" && atleta.team == "Brazil" && atleta.sex == "F" && atleta.year <= 2008).length;
         const outrasAlternativas = [2, 3, 4, 5];
@@ -212,7 +212,7 @@ const recebeListaAtletas = (registroAtletas) => {
     pontos: 1
 },
 {
-  pergunta: "Qual país conquistou a primeira medalha de ouro no basquete feminino nas Olimpíadas?",
+  pergunta: "Which country won the first gold medal in women's basketball at the Olympics?",
   buscarResposta: (atletas) => (alternativas = undefined) => {
       const primeiraOuroFeminino = atletas.filter(atleta => atleta.medal == "Gold" && atleta.sex == "F")
           .reduce((acc, atleta) => {
@@ -230,10 +230,10 @@ const recebeListaAtletas = (registroAtletas) => {
   pontos: 1
 },
 {
-  pergunta: "Quantas medalhas de ouro foram concedidas aos atletas do Canadá no basquete masculino até 2012?",
+  pergunta: "How many gold medals were awarded to Canada's athletes in men's basketball through 2012?",
   buscarResposta: (atletas) => (alternativas = undefined) => {
       const ouroCanadaMasculino = atletas.filter(atleta => atleta.medal == "Gold" && atleta.team == "Canada" && atleta.sex == "M" && atleta.year <= 2012).length;
-      const outrasAlternativas = [0, 1, 2, 3];
+      const outrasAlternativas = [4, 1, 2, 3];
       const aleatorioOrdena = () => Math.random() - 0.5;
       const corte = alternativas !== undefined ? alternativas : outrasAlternativas.length + 1;
       const resposta = [...[ouroCanadaMasculino, ...outrasAlternativas].slice(0, corte)];
@@ -242,7 +242,7 @@ const recebeListaAtletas = (registroAtletas) => {
   pontos: 1
 },
 {
-  pergunta: "Em que ano a modalidade de basquete foi introduzida pela primeira vez nas Olimpíadas?",
+  pergunta: "In what year was basketball introduced to the Olympics for the first time?",
   buscarResposta: (atletas) => (alternativas = undefined) => {
       const primeiroAnoBasquete = atletas.filter(atleta => atleta.sport == "Basketball").map(atleta => atleta.year).sort()[0];
       const aleatorioOrdena = () => Math.random() - 0.5;
