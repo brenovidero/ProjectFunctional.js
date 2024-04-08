@@ -72,7 +72,7 @@ const processarCSV = () => {
     .catch(error => { // O método catch é chamado quando a Promise é rejeitada, e retorna um erro
       console.error('Ocorreu um erro ao processar o arquivo CSV:', error);
     });
-    
+
 
 }
 // Chamar a função para processar o arquivo CSV quando a página for carregada
@@ -176,20 +176,36 @@ const recebeListaAtletas = (csvCleaned) => {
       pontos: 1
     },
     {
-      pergunta: "Quantas vezes a equipe de basquete masculino da União Soviética ganhou medalha de ouro até 1992?",
+      // A pergunta sobre a União Soviética no basquete masculino até 1992
+      pergunta: "How many times did the Soviet Union men's basketball team win the gold medal until 1992?",
+
+      // Função para buscar a resposta, que recebe os atletas como parâmetro e retorna outra função opcionalmente recebendo alternativas
       buscarResposta: atletas => (alternativas = undefined) => {
-          const medalhasUniaoSovietica = atletas.filter(atleta => atleta.team === "Soviet Union" && atleta.sex === "M" && atleta.year < 1992 && atleta.medal !== "NA").length;
-          const outrasAlternativas = [6, 8, 10, 12]; // Outras opções de resposta
-          const aleatorioOrdena = () => Math.random() - 0.5;
-          const corte = alternativas !== undefined ? alternativas : outrasAlternativas.length + 1;
-          const resposta = [...[medalhasUniaoSovietica, ...outrasAlternativas].slice(0, corte).sort((a, b) => a - b)];
-          return [...resposta].sort(aleatorioOrdena);
+        // Filtra os atletas relevantes com base nas condições fornecidas
+        const medalhasUniaoSovietica = atletas.filter(atleta => atleta.team === "Soviet Union" && atleta.sex === "M" && atleta.year < 1992 && atleta.medal !== "NA").length;
+
+        // Outras opções de resposta
+        const outrasAlternativas = [6, 8, 10, 12];
+
+        // Função para ordenar aleatoriamente as respostas
+        const aleatorioOrdena = () => Math.random() - 0.5;
+
+        // Determina o número de alternativas a serem retornadas
+        const corte = alternativas !== undefined ? alternativas : outrasAlternativas.length + 1;
+
+        // Constrói a resposta, incluindo o número de medalhas da União Soviética e algumas alternativas adicionais, ordenadas aleatoriamente
+        const resposta = [...[medalhasUniaoSovietica, ...outrasAlternativas].slice(0, corte).sort((a, b) => a - b)];
+
+        // Retorna a resposta com as alternativas ordenadas aleatoriamente
+        return [...resposta].sort(aleatorioOrdena);
       },
+
+      // Pontos atribuídos para esta pergunta
       pontos: 1
-  }
+    }
   ];
-// Função utilizada para controlar estados de eventos, usada para atualizar indices em outras partes do código, sem o uso de váriaveis.
-// A função retorna um array contendo o valor inicial e o final
+  // Função utilizada para controlar estados de eventos, usada para atualizar indices em outras partes do código, sem o uso de váriaveis.
+  // A função retorna um array contendo o valor inicial e o final
   const useState = (estadoinicial) => {
     const ler = () => estadoinicial
     const escrever = f => estadoinicial = typeof f === 'function' ? f(estadoinicial) : f
@@ -234,7 +250,7 @@ const recebeListaAtletas = (csvCleaned) => {
   const feedbackContainer = document.getElementById("feedback-container");
   const scoreContainer = document.getElementById("score-container");
   const questionText = document.getElementById("question-text");
-  const answerForm = document.getElementById("answer-form");      
+  const answerForm = document.getElementById("answer-form");
   const feedbackText = document.getElementById("feedback-text"); //???
   const nextQuestionBtn = document.getElementById("next-question-btn");
   const scoreCorrect = document.getElementById("score-correct"); //???
