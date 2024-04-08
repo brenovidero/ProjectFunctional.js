@@ -198,7 +198,38 @@ const recebeListaAtletas = (registroAtletas) => {
   
       // Pontos atribuídos para esta pergunta
       pontos: 1
-  }
+  },
+  {
+    pergunta: "Quantas vezes o Brasil ganhou medalhas de ouro no basquete feminino até 2008?",
+    buscarResposta: (atletas) => (alternativas = undefined) => {
+        const ouroBrasilFeminino = atletas.filter(atleta => atleta.medal == "Gold" && atleta.team == "Brazil" && atleta.sex == "F" && atleta.year <= 2008).length;
+        const outrasAlternativas = [2, 3, 4, 5];
+        const aleatorioOrdena = () => Math.random() - 0.5;
+        const corte = alternativas !== undefined ? alternativas : outrasAlternativas.length + 1;
+        const resposta = [...[ouroBrasilFeminino, ...outrasAlternativas].slice(0, corte)];
+        return [...resposta].sort(aleatorioOrdena);
+    },
+    pontos: 1
+},
+{
+  pergunta: "Qual país conquistou a primeira medalha de ouro no basquete feminino nas Olimpíadas?",
+  buscarResposta: (atletas) => (alternativas = undefined) => {
+      const primeiraOuroFeminino = atletas.filter(atleta => atleta.medal == "Gold" && atleta.sex == "F")
+          .reduce((acc, atleta) => {
+              index = acc.findIndex(x => x.team == atleta.team);
+              if (index == -1) {
+                  acc = [...acc, atleta];
+              }
+              return acc;
+          }, []).sort((a, b) => a.year - b.year)[0].team;
+      const aleatorioOrdena = () => Math.random() - 0.5;
+      const corte = alternativas !== undefined ? alternativas : 5;
+      const resposta = [primeiraOuroFeminino, "USA", "Russia", "Australia", "China"].slice(0, corte);
+      return [...resposta].sort(aleatorioOrdena);
+  },
+  pontos: 1
+}
+
   ];
 // Função utilizada para controlar estados de eventos, usada para atualizar indices em outras partes do código, sem o uso de váriaveis.
 // A função retorna um array contendo o valor inicial e o final
