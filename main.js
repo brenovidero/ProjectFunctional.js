@@ -77,10 +77,10 @@ processarCSV(); // Chama a função para processar o arquivo CSV
 
 // Função que recebe a lista de atletas e executa o quiz
 const recebeListaAtletas = (registroAtletas) => {
-
+// O array de perguntas, é um array de objetos, o primeiro objeto é o próprio texto da pergunta 
   const perguntas = [
     {
-      pergunta: "Which country has won the most gold medals in men's basketball until 2014?",
+      pergunta: "Which country has won the most gold medals in men's basketball until 2014?",//PERGUNTA 1
       buscarResposta: (atletas) => (alternativas = undefined) => {
         const medalhasOuroPorPais = atletas.filter(atleta => atleta.medal == "Gold" && atleta.sex == "M" && atleta.year <= 2014)
           .reduce((contador, atleta) => {
@@ -95,7 +95,7 @@ const recebeListaAtletas = (registroAtletas) => {
       pontos: 1
     },
     {
-      pergunta: "How many times has the United States men's basketball team won the gold medal until 2016?",
+      pergunta: "How many times has the United States men's basketball team won the gold medal until 2016?",//PERGUNTA 2
       buscarResposta: atletas => (alternativas = undefined) => {
         const ouroEUA = atletas.filter(atleta => atleta.medal == "Gold" && atleta.team == "United States" && atleta.sex == "M" && atleta.year < 2016)
           .reduce((acc, atletas) => {
@@ -114,7 +114,7 @@ const recebeListaAtletas = (registroAtletas) => {
       pontos: 1
     },
     {
-      pergunta: "How many countries have won gold medals in men's basketball in the Olympics until 1980?",
+      pergunta: "How many countries have won gold medals in men's basketball in the Olympics until 1980?",//PERGUNTA 3
       buscarResposta: atletas => (alternativas = undefined) => {
         const paisesComOuro = atletas.filter(atleta => atleta.medal == "Gold" && atleta.sex == "M" && atleta.year <= 1980)
           .reduce((acc, atleta) => {
@@ -134,7 +134,7 @@ const recebeListaAtletas = (registroAtletas) => {
       pontos: 1
     },
     {
-      pergunta: "How many medals have been awarded to athletes from the Yugoslavia basketball team until 2016?",
+      pergunta: "How many medals have been awarded to athletes from the Yugoslavia basketball team until 2016?",//PERGUNTA 4
       buscarResposta: atletas => (alternativas = undefined) => {
         const medalhasIugoslavia = atletas.filter(atleta => atleta.team == "Yugoslavia" && atleta.sex == "M" && atleta.year <= 2016 && atleta.medal != "NA").length
         const outrasAlternativas = [70, 50, 77, 55];
@@ -146,7 +146,7 @@ const recebeListaAtletas = (registroAtletas) => {
       pontos: 1
     },
     {
-      pergunta: "Which country was the first to win a gold medal in women's basketball at the Olympics?",
+      pergunta: "Which country was the first to win a gold medal in women's basketball at the Olympics?",//PERGUNTA 5
       buscarResposta: atletas => (alternativas = undefined) => {
         const ouroFeminino = [...atletas.filter(atleta => (atleta.medal == "Gold" || atleta.medal == 'Silver') && atleta.sex == "F")
           .reduce((acc, atleta) => {
@@ -166,7 +166,7 @@ const recebeListaAtletas = (registroAtletas) => {
     },
     {
       // A pergunta sobre a União Soviética no basquete masculino até 1992
-      pergunta: "How many times did the Soviet Union men's basketball team win the gold medal until 1992?",
+      pergunta: "How many times did the Soviet Union men's basketball team win the gold medal until 1992?",//PERGUNTA 6
   
       // Função para buscar a resposta, que recebe os atletas como parâmetro e retorna outra função opcionalmente recebendo alternativas
       buscarResposta: atletas => (alternativas = undefined) => {
@@ -200,7 +200,7 @@ const recebeListaAtletas = (registroAtletas) => {
       pontos: 1
   },
   {
-    pergunta: "How many times did Brazil win gold medals in women's basketball until 2008?",
+    pergunta: "How many times did Brazil win gold medals in women's basketball until 2008?",//PERGUNTA 7
     buscarResposta: (atletas) => (alternativas = undefined) => {
         const ouroBrasilFeminino = atletas.filter(atleta => atleta.medal == "Gold" && atleta.team == "Brazil" && atleta.sex == "F" && atleta.year <= 2008).length;
         const outrasAlternativas = [2, 3, 4, 5];
@@ -212,7 +212,7 @@ const recebeListaAtletas = (registroAtletas) => {
     pontos: 1
 },
 {
-  pergunta: "Which country won the first gold medal in women's basketball at the Olympics?",
+  pergunta: "Which country won the first gold medal in women's basketball at the Olympics?",//PERGUNTA 8
   buscarResposta: (atletas) => (alternativas = undefined) => {
       const primeiraOuroFeminino = atletas.filter(atleta => atleta.medal == "Gold" && atleta.sex == "F")
           .reduce((acc, atleta) => {
@@ -230,7 +230,7 @@ const recebeListaAtletas = (registroAtletas) => {
   pontos: 1
 },
 {
-  pergunta: "How many gold medals were awarded to Canada's athletes in men's basketball through 2012?",
+  pergunta: "How many gold medals were awarded to Canada's athletes in men's basketball through 2012?",//PERGUNTA 9
   buscarResposta: (atletas) => (alternativas = undefined) => {
       const ouroCanadaMasculino = atletas.filter(atleta => atleta.medal == "Gold" && atleta.team == "Canada" && atleta.sex == "M" && atleta.year <= 2012).length;
       const outrasAlternativas = [4, 1, 2, 3];
@@ -242,7 +242,7 @@ const recebeListaAtletas = (registroAtletas) => {
   pontos: 1
 },
 {
-  pergunta: "In what year was basketball introduced to the Olympics for the first time?",
+  pergunta: "In what year was basketball introduced to the Olympics for the first time?",//PERGUNTA 10
   buscarResposta: (atletas) => (alternativas = undefined) => {
       const primeiroAnoBasquete = atletas.filter(atleta => atleta.sport == "Basketball").map(atleta => atleta.year).sort()[0];
       const aleatorioOrdena = () => Math.random() - 0.5;
@@ -315,9 +315,9 @@ const recebeListaAtletas = (registroAtletas) => {
 
   const mostrarProximaPergunta = () => {
     const respostaUsuario = document.querySelector("input[name='answer']:checked");
-    const currentQuestionIndex = IndexLeituraAtualQuestao()
+    const indiceAtualQuestao = IndexLeituraAtualQuestao()
     const resposta = respostaUsuario.value;
-    const perguntaAtual = perguntas[currentQuestionIndex];
+    const perguntaAtual = perguntas[indiceAtualQuestao];
     const respostaCorreta = buscarRespostaCorreta(registroAtletas, perguntaAtual);
 
     if (resposta == respostaCorreta) {
