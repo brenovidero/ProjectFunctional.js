@@ -333,6 +333,8 @@ const recebeListaAtletas = (registroAtletas) => {
   const [lerRespostasCorretas, escreverRespostasCorretas] = definirEstado(0)
   const [lerRespostasIncorretas, escreverRespostasIncorretas] = definirEstado(0)
 
+
+  // Esta função é responsável por avançar para a próxima pergunta após o usuário responder à pergunta atual.
   const mostrarProximaPergunta = () => {
     const respostaUsuario = document.querySelector("input[name='answer']:checked");
     const indiceAtualQuestao = IndexLeituraAtualQuestao()
@@ -340,6 +342,7 @@ const recebeListaAtletas = (registroAtletas) => {
     const perguntaAtual = perguntas[indiceAtualQuestao];
     const respostaCorreta = buscarRespostaCorreta(registroAtletas, perguntaAtual);
 
+    // Verifica se a resposta do usuário está correta e atualiza a contagem de respostas corretas ou incorretas
     if (resposta == respostaCorreta) {
       escreverRespostasCorretas(x => x + 1);
     } else {
@@ -359,6 +362,7 @@ const recebeListaAtletas = (registroAtletas) => {
 
   }
 
+  // Esta função reinicia o quiz, restaurando todos os estados para os valores iniciais e exibindo a primeira pergunta.
   const reiniciarQuiz = () => {
     // Reseta os estados para os valores iniciais
     IndexEscritaAtualQuestao(0)
@@ -370,12 +374,22 @@ const recebeListaAtletas = (registroAtletas) => {
     feedbackContainer.style.display = "none";
     contemQuestoes.style.display = "block";
   };
+  // Adiciona um evento de clique ao botão "Reiniciar Quiz" para chamar a função reiniciarQuiz quando o botão é clicado
   botaoReiniciarQuiz.addEventListener("click", reiniciarQuiz)
 
+  // Esta função exibe uma pergunta no formulário do quiz.
   const exibirPergunta = (pergunta, processCSV) => {
+
+    // Define o texto da pergunta no elemento HTML correspondente
     textoDaQuestao.textContent = pergunta.pergunta;
+
+    // Limpa o conteúdo do formulário de respostas
     respostaFormulario.innerHTML = "";
+
+    // Obtém as respostas possíveis chamando a função buscarResposta da pergunta e executando-a com o argumento processCSV
     const respostasPossiveis = [...(pergunta.buscarResposta(processCSV)())];
+
+     // Para cada resposta possível, cria um input radio e um label correspondente e os adiciona ao formulário de respostas
     respostasPossiveis.map(resposta => { // Mapeia as respostas possíveis e cria um input radio para cada uma
       const input = document.createElement("input");
       input.type = "radio";
@@ -393,6 +407,8 @@ const recebeListaAtletas = (registroAtletas) => {
   }
 
   exibirPergunta(perguntas[IndexLeituraAtualQuestao()], registroAtletas);
+  
+  // Adiciona um evento de clique ao botão "Próxima Questão" para chamar a função mostrarProximaPergunta quando o botão é clicado
   botaoProximaQuestao.addEventListener("click", mostrarProximaPergunta);
 
 
