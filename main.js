@@ -206,7 +206,7 @@ const recebeListaAtletas = (registroAtletas) => {
         const outrasAlternativas = [2, 3, 4, 5];
         const aleatorioOrdena = () => Math.random() - 0.5;
         const corte = alternativas !== undefined ? alternativas : outrasAlternativas.length + 1;
-        const resposta = [...[ouroBrasilFeminino, ...outrasAlternativas].slice(0, corte)];
+        const resposta = [...[ouroBrasilFeminino, ...outrasAlternativas].slice(0,corte)];
         return [...resposta].sort(aleatorioOrdena);
     },
     pontos: 1
@@ -257,37 +257,51 @@ const recebeListaAtletas = (registroAtletas) => {
   ];
 // Função utilizada para controlar estados de eventos, usada para atualizar indices em outras partes do código, sem o uso de váriaveis.
 // A função retorna um array contendo o valor inicial e o final
+  // Define uma função chamada definirEstado que recebe um estado inicial como parâmetro
   const definirEstado = (estadoinicial) => {
-    const ler = () => estadoinicial
-    const escrever = f => estadoinicial = typeof f == 'function' ? f(estadoinicial) : f
-    return [ler, escrever]
+    // Define uma função chamada ler que retorna o estado inicial
+    const ler = () => estadoinicial;
+    // Define uma função chamada escrever que atualiza o estado inicial com um novo valor
+    const escrever = f => estadoinicial = typeof f == 'function' ? f(estadoinicial) : f;
+    // Retorna um array contendo as funções ler e escrever
+    return [ler, escrever];
   }
+
+  // Define uma função chamada selecionaAlternativa
   const selecionaAlternativa = () => {
+    // Obtém a resposta correta para a pergunta atual
     const respostaCorreta = perguntas[IndexLeituraAtualQuestao()].buscarResposta(registroAtletas)(1)[0];
+    // Obtém todos os labels das alternativas
     const alternativasLabels = [...document.querySelectorAll('#answer-form label')];
 
+    // Adiciona um ouvinte de eventos de clique para cada label das alternativas
     [...alternativasLabels].map(label => {
       label.addEventListener('click', () => {
+        // Remove as classes 'selected', 'correct' e 'wrong' de todos os labels
         [...alternativasLabels].map(label => {
           label.classList.remove('selected');
           label.classList.remove('correct');
           label.classList.remove('wrong');
-          label.removeEventListener('click', () => { });// Remove o ouvinte de eventos de clique
+          label.removeEventListener('click', () => { }); // Remove o ouvinte de eventos de clique
         });
 
+        // Adiciona a classe 'selected' ao label clicado
         label.classList.add('selected');
+        // Verifica se a resposta selecionada é a resposta correta
         if (label.children[0].value == respostaCorreta) {
-          label.classList.add('correct');
+          label.classList.add('correct'); // Adiciona a classe 'correct' ao label
         } else {
-          label.classList.add('wrong');
-         // Encontra o label correto e adiciona a classe 'correct'
+          label.classList.add('wrong'); // Adiciona a classe 'wrong' ao label
+          // Encontra o label correto e adiciona a classe 'correct'
           const labelCorreto = alternativasLabels.find(label => label.children[0].value == respostaCorreta);
           labelCorreto.classList.add('correct');
         }
 
+        // Exibe o botão de próxima pergunta
         botaoProximaQuestao.style.display = "block";
+        // Desabilita eventos de ponteiro em todos os labels
         [...alternativasLabels].map(label => {
-          label.style.pointerEvents = "none";// Desabilita eventos de ponteiro em todos os labels
+          label.style.pointerEvents = "none";
         });
       });
     });
