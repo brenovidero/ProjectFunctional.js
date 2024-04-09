@@ -64,7 +64,8 @@ const processarCSV = () => {
             )
           ),
       ].slice(1)[0]; // Remove a primeira linha, que é o cabeçalho
-      recebeListaAtletas(csvLimpo);
+      
+      recebeListaAtletas(csvLimpo);// chama a função que executa o quiz e é definida abaixo e passa como argumento o csv processado
     })
     .catch(error => { // O método catch é chamado quando a Promise é rejeitada, e retorna um erro
       console.error('Ocorreu um erro ao processar o arquivo CSV:', error);
@@ -78,15 +79,23 @@ processarCSV(); // Chama a função para processar o arquivo CSV
 // Função que recebe a lista de atletas e executa o quiz
 const recebeListaAtletas = (registroAtletas) => {
 // O array de perguntas, é um array de objetos, o primeiro objeto é o próprio texto da pergunta 
+// O segundo elemento dos objetos é uma função que busca a resposta certa e cria as alternativas 
+// O terceiro elemento é a pontuação, que vale 1 em cada pergunta 
+// A lógica da função busca resposta será explicada na primeira pergunta, visto que nas próximas perguntas a lógica será parecida, com alguns ajustes.
+
   const perguntas = [
+     // Pergunta 1: País com mais medalhas de ouro no basquete masculino até 2014
     {
-      pergunta: "Which country has won the most gold medals in men's basketball until 2014?",//PERGUNTA 1
+      pergunta: "Which country has won the most gold medals in men's basketball until 2014?",
       buscarResposta: (atletas) => (alternativas = undefined) => {
+        // cada pergunta usa uma função que filtra o array atletas de acordo com a pergunta
         const medalhasOuroPorPais = atletas.filter(atleta => atleta.medal == "Gold" && atleta.sex == "M" && atleta.year <= 2014)
           .reduce((contador, atleta) => {
+            // A função reduce, conta o número de atletas que sobrou após o processamento anterior (.filter).
             contador[atleta.team] = (contador[atleta.team] || 0) + 1; // Incrementa o contador de medalhas de ouro para o país
             return contador;
           }, {});
+           // Função para ordenar aleatoriamente as respostas
         const aleatorioOrdena = () => Math.random() - 0.5;
         const corte = alternativas !== undefined ? alternativas : Object.keys(medalhasOuroPorPais).length + 1; // Determina o número de alternativas a serem retornadas
         const paisComMaisOuro = [...Object.keys(medalhasOuroPorPais), 'Spain'].slice(0, corte); // Faz uma cópia do array de países com medalhas de ouro e depois faz o corte do array de acordo com o número de alternativas ou a resposta corrta
@@ -94,8 +103,9 @@ const recebeListaAtletas = (registroAtletas) => {
       },
       pontos: 1
     },
+    // Pergunta 2: Número de vezes que a equipe masculina de basquete dos Estados Unidos ganhou a medalha de ouro até 2016
     {
-      pergunta: "How many times has the United States men's basketball team won the gold medal until 2016?",//PERGUNTA 2
+      pergunta: "How many times has the United States men's basketball team won the gold medal until 2016?",
       buscarResposta: atletas => (alternativas = undefined) => {
         const ouroEUA = atletas.filter(atleta => atleta.medal == "Gold" && atleta.team == "United States" && atleta.sex == "M" && atleta.year < 2016)
           .reduce((acc, atletas) => {
@@ -113,8 +123,9 @@ const recebeListaAtletas = (registroAtletas) => {
       },
       pontos: 1
     },
+     // Pergunta 3: Número de países que ganharam medalhas de ouro no basquete masculino até 1980
     {
-      pergunta: "How many countries have won gold medals in men's basketball in the Olympics until 1980?",//PERGUNTA 3
+      pergunta: "How many countries have won gold medals in men's basketball in the Olympics until 1980?",
       buscarResposta: atletas => (alternativas = undefined) => {
         const paisesComOuro = atletas.filter(atleta => atleta.medal == "Gold" && atleta.sex == "M" && atleta.year <= 1980)
           .reduce((acc, atleta) => {
@@ -133,8 +144,9 @@ const recebeListaAtletas = (registroAtletas) => {
       },
       pontos: 1
     },
+    // Pergunta 4: Número de medalhas concedidas aos atletas da equipe de basquete da Iugoslávia até 2016
     {
-      pergunta: "How many medals have been awarded to athletes from the Yugoslavia basketball team until 2016?",//PERGUNTA 4
+      pergunta: "How many medals have been awarded to athletes from the Yugoslavia basketball team until 2016?",
       buscarResposta: atletas => (alternativas = undefined) => {
         const medalhasIugoslavia = atletas.filter(atleta => atleta.team == "Yugoslavia" && atleta.sex == "M" && atleta.year <= 2016 && atleta.medal != "NA").length
         const outrasAlternativas = [70, 50, 77, 55];
@@ -145,8 +157,9 @@ const recebeListaAtletas = (registroAtletas) => {
       },
       pontos: 1
     },
+     // Pergunta 5: País que ganhou a primeira medalha de ouro no basquete feminino nas Olimpíadas
     {
-      pergunta: "Which country was the first to win a gold medal in women's basketball at the Olympics?",//PERGUNTA 5
+      pergunta: "Which country was the first to win a gold medal in women's basketball at the Olympics?",
       buscarResposta: atletas => (alternativas = undefined) => {
         const ouroFeminino = [...atletas.filter(atleta => (atleta.medal == "Gold" || atleta.medal == 'Silver') && atleta.sex == "F")
           .reduce((acc, atleta) => {
@@ -164,13 +177,11 @@ const recebeListaAtletas = (registroAtletas) => {
       },
       pontos: 1
     },
+
     {
-      // A pergunta sobre a União Soviética no basquete masculino até 1992
-      pergunta: "How many times did the Soviet Union men's basketball team win the gold medal until 1992?",//PERGUNTA 6
-  
-      // Função para buscar a resposta, que recebe os atletas como parâmetro e retorna outra função opcionalmente recebendo alternativas
+      // Pergunta 6: Número de vezes que a equipe masculina de basquete da União Soviética ganhou a medalha de ouro até 1992
+      pergunta: "How many times did the Soviet Union men's basketball team win the gold medal until 1992?",
       buscarResposta: atletas => (alternativas = undefined) => {
-          // Filtra os atletas relevantes com base nas condições fornecidas
           const medalhasUniaoSovietica = atletas.filter(atleta => atleta.team == "Soviet Union" && atleta.sex == "M" && atleta.year <= 1992 && atleta.medal !== "NA")
                                                 .reduce((acc, atleta)=> {
                                                   index = acc.findIndex(x => x.year == atleta.year);
@@ -182,25 +193,17 @@ const recebeListaAtletas = (registroAtletas) => {
             // resposta 9 vezes 
           // Outras opções de resposta
           const outrasAlternativas = [6, 8, 10, 12];
-  
-          // Função para ordenar aleatoriamente as respostas
           const aleatorioOrdena = () => Math.random() - 0.5;
-  
           // Determina o número de alternativas a serem retornadas
           const corte = alternativas !== undefined ? alternativas : outrasAlternativas.length + 1;
-  
-          // Constrói a resposta, incluindo o número de medalhas da União Soviética e algumas alternativas adicionais, ordenadas aleatoriamente
           const resposta = [...[medalhasUniaoSovietica, ...outrasAlternativas].slice(0, corte).sort((a, b) => a - b)];
-  
-          // Retorna a resposta com as alternativas ordenadas aleatoriamente
           return [...resposta].sort(aleatorioOrdena);
       },
-  
-      // Pontos atribuídos para esta pergunta
       pontos: 1
   },
+  // Pergunta 7: Número de vezes que a equipe feminina de basquete do Brasil ganhou a medalha de ouro até 2008
   {
-    pergunta: "How many times did Brazil win gold medals in women's basketball until 2008?",//PERGUNTA 7
+    pergunta: "How many times did Brazil win gold medals in women's basketball until 2008?",
     buscarResposta: (atletas) => (alternativas = undefined) => {
         const ouroBrasilFeminino = atletas.filter(atleta => atleta.medal == "Gold" && atleta.team == "Brazil" && atleta.sex == "F" && atleta.year <= 2008).length;
         const outrasAlternativas = [2, 3, 4, 5];
@@ -211,6 +214,7 @@ const recebeListaAtletas = (registroAtletas) => {
     },
     pontos: 1
 },
+// Pergunta 8: País que ganhou a primeira medalha de ouro no basquete feminino nas Olimpíadas
 {
   pergunta: "Which country won the first gold medal in women's basketball at the Olympics?",//PERGUNTA 8
   buscarResposta: (atletas) => (alternativas = undefined) => {
@@ -229,8 +233,9 @@ const recebeListaAtletas = (registroAtletas) => {
   },
   pontos: 1
 },
+ // Pergunta 9: Número de vezes que a equipe masculina de basquete do Canadá ganhou a medalha de ouro até 2012
 {
-  pergunta: "How many gold medals were awarded to Canada's athletes in men's basketball through 2012?",//PERGUNTA 9
+  pergunta: "How many gold medals were awarded to Canada's athletes in men's basketball through 2012?",
   buscarResposta: (atletas) => (alternativas = undefined) => {
       const ouroCanadaMasculino = atletas.filter(atleta => atleta.medal == "Gold" && atleta.team == "Canada" && atleta.sex == "M" && atleta.year <= 2012).length;
       const outrasAlternativas = [4, 1, 2, 3];
@@ -241,8 +246,9 @@ const recebeListaAtletas = (registroAtletas) => {
   },
   pontos: 1
 },
+// Pergunta 10: Ano em que o basquete foi introduzido nas Olimpíadas pela primeira vez
 {
-  pergunta: "In what year was basketball introduced to the Olympics for the first time?",//PERGUNTA 10
+  pergunta: "In what year was basketball introduced to the Olympics for the first time?",
   buscarResposta: (atletas) => (alternativas = undefined) => {
       const primeiroAnoBasquete = atletas.filter(atleta => atleta.sport == "Basketball").map(atleta => atleta.year).sort()[0];
       const aleatorioOrdena = () => Math.random() - 0.5;
